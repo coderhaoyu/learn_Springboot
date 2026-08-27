@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.userdemo.mapper.UserMapper">
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users(name,age,email) VALUES (#{name}, #{age},#{email})
+    </insert>
+    <update id="updateUser">
+        UPDATE users
+        SET email = #{email},
+            age   = #{age},
+            name  =#{name}
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteUser">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+    <select id="findById" resultType="com.example.userdemo.entity.User">
+        SELECT id, name, age, email
+        FROM users
+        WHERE id = #{id}
+    </select>
+    <select id="findAll" resultType="com.example.userdemo.entity.User">
+        SELECT id, name, age, email
+        FROM users</select>
+    <select id="findByPage" resultType="com.example.userdemo.entity.User">
+        SELECT id,name,age,email FROM users ORDER BY id  LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="count" resultType="java.lang.Long">
+     SELECT COUNT(*) FROM users
+    </select>
+    <select id="findUserByEmail" resultType="com.example.userdemo.entity.User">
+        SELECT id,name,users.email,age from users where email = #{email}
+    </select>
+</mapper>
