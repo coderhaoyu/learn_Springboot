@@ -101,6 +101,7 @@ public class UserService {
         findById(id);
         UserVo existUserByEmail = getUserInfoByEmail(updateUserRequest.getEmail());
 
+//      查重：只有在查出记录 且 查出的记录不是自己 时才拦截
         if (existUserByEmail != null && !Objects.equals(existUserByEmail.getId(), id)) {
             throw new BusinessException(409, "邮箱已经存在");
         }
