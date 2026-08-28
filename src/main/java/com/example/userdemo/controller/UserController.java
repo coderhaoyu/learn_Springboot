@@ -33,20 +33,21 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserVo getUserInfoById(@PathVariable long id) {
-        return userService.findById(id);
+    public ApiResponse<UserVo> getUserInfoById(@PathVariable long id) {
+        UserVo user = userService.findById(id);
+        return ApiResponse.ok(user);
     }
 
     @PostMapping()
-    public String addUser(@Valid @RequestBody CreateUserRequest userData) {
+    public ApiResponse<Boolean> addUser(@Valid @RequestBody CreateUserRequest userData) {
         userService.addUser(userData);
-        return "Ok";
+        return ApiResponse.ok(true);
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserRequest userData) {
+    public ApiResponse<Boolean> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserRequest userData) {
         userService.updateUser(id, userData);
-        return "Ok";
+        return ApiResponse.ok(true);
     }
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.example.userdemo.service;
 
+import com.example.userdemo.common.exception.BusinessException;
 import com.example.userdemo.common.response.PageResult;
 import com.example.userdemo.dto.CreateUserRequest;
 import com.example.userdemo.dto.UpdateUserRequest;
@@ -9,8 +10,10 @@ import com.example.userdemo.mapper.UserMapper;
 import com.example.userdemo.vo.UserVo;
 import org.springframework.stereotype.Service;
 
+import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -56,7 +59,7 @@ public class UserService {
 
         List<User> userList = userMapper.findByPage(offset, size);
 
-        List<UserVo> userVoList =  userList.stream().map(this::convertToVo).toList();
+        List<UserVo> userVoList = userList.stream().map(this::convertToVo).toList();
 
         return new PageResult<UserVo>(userVoList, total, page, size);
 
@@ -73,24 +76,41 @@ public class UserService {
 //    }
 
     public UserVo findById(long id) {
-        return convertToVo(userMapper.findById(id));
+        User user = userMapper.findById(id);
+        if (user == null) {
+            throw new BusinessException(404, "用户不存在");
+        }
+        return convertToVo(user);
     }
 
     public void addUser(CreateUserRequest createUserRequest) {
-        User user = new User();
-        user.setName(createUserRequest.getName());
-        user.setAge(createUserRequest.getAge());
-        user.setEmail(createUserRequest.getEmail());
-        userMapper.addUser(user);
+        UserVo user = getUserInfoByEmail(createUserRequest.getEmail());
+        if (user != null) {
+            throw new BusinessException(409, "邮箱已存在");
+        }
+        User newUser = new User();
+        newUser.setName(createUserRequest.getName());
+        newUser.setAge(createUserRequest.getAge());
+        newUser.setEmail(createUserRequest.getEmail());
+        userMapper.addUser(newUser);
+
+
     }
 
     public void updateUser(long id, UpdateUserRequest updateUserRequest) {
-        User user = new User();
-        user.setName(updateUserRequest.getName());
-        user.setAge(updateUserRequest.getAge());
-        user.setEmail(updateUserRequest.getEmail());
-        user.setId(id);
-        userMapper.updateUser(user);
+        findById(id);
+        UserVo existUserByEmail = getUserInfoByEmail(updateUserRequest.getEmail());
+
+        if (existUserByEmail != null && !Objects.equals(existUserByEmail.getId(), id)) {
+            throw new BusinessException(409, "邮箱已经存在");
+        }
+
+        User newUser = new User();
+        newUser.setName(updateUserRequest.getName());
+        newUser.setAge(updateUserRequest.getAge());
+        newUser.setEmail(updateUserRequest.getEmail());
+        newUser.setId(id);
+        userMapper.updateUser(newUser);
     }
 
     public void deleteUser(long id) {
@@ -98,7 +118,7 @@ public class UserService {
     }
 
 
-    public UserVo getUserInfoByEmail(String email){
+    public UserVo getUserInfoByEmail(String email) {
 
         User user = userMapper.findUserByEmail(email);
 
