@@ -51,9 +51,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable long id) {
+    public ApiResponse<Boolean> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
-        return "Ok";
+        return ApiResponse.ok(true);
     }
 
     @GetMapping("/by-email")

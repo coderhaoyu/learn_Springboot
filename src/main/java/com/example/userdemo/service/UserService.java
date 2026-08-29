@@ -115,6 +115,7 @@ public class UserService {
     }
 
     public void deleteUser(long id) {
+        findById(id);
         userMapper.deleteUser(id);
     }
 
