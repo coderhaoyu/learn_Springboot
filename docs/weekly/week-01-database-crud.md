@@ -1,6 +1,5 @@
 # 第 1 周：完成真正的数据库 CRUD
 
-> 日期：2026 年 8 月 12–16 日  
 > 建议投入：15–18 小时  
 > 对应总计划：[PLAN.md](../../PLAN.md)
 
@@ -41,7 +40,7 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 
 ## 每日安排
 
-### 8 月 12 日（周三）：补齐内存 CRUD，建立基线（2–3 小时）
+### 周三：补齐内存 CRUD，建立基线（2–3 小时）
 
 目标：先弄清 HTTP 与分层，再替换存储方式。
 
@@ -59,7 +58,7 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 
 检查题：`@PathVariable` 和 `@RequestBody` 分别从 HTTP 请求的哪里取得数据？
 
-### 8 月 13 日（周四）：运行 MySQL 并设计表（3 小时）
+### 周四：运行 MySQL 并设计表（3 小时）
 
 目标：理解 Java 对象落入关系型数据库前需要怎样的表结构。
 
@@ -81,7 +80,7 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 - [x] `sql/schema.sql` 建表脚本。
 - [x] 容器和数据库连接信息记录，但不提交真实密码。
 
-### 8 月 14 日（周五）：接通 Spring Boot、MyBatis 与 MySQL（3 小时）
+### 周五：接通 Spring Boot、MyBatis 与 MySQL（3 小时）
 
 目标：完成一次最小数据库查询闭环。
 
@@ -100,7 +99,7 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 
 检查题：Mapper 接口没有手写实现类，为什么运行时仍能被注入？
 
-### 8 月 15 日（周六）：迁移完整 CRUD（4–5 小时）
+### 周六：迁移完整 CRUD（4–5 小时）
 
 目标：把其余四个操作逐个迁移，每次只完成一个闭环。
 
@@ -124,7 +123,7 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 - [x] Service 不再保存 `List<User>`。
 - [x] Controller 没有直接调用 Mapper。
 
-### 8 月 16 日（周日）：回归验证与知识复盘（2–3 小时）
+### 周日：回归验证与知识复盘（2–3 小时）
 
 1. 清理并重新准备一组测试数据。
 2. 按新增、详情、列表、修改、删除顺序完成全流程。
