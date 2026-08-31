@@ -20,11 +20,13 @@
 
 学习投入：每周 15–20 小时，其中约 70% 编码、20% 测试调试、10% 阅读总结。
 
+基础语法与框架补课手册：[`docs/java-springboot-foundation.md`](docs/java-springboot-foundation.md)。
+
 ## 结业项目设计
 
 采用单体 Spring Boot 项目，继续扩展当前仓库：
 
-- Java 21、Spring Boot 3.3.2、Maven。
+- Java 21、Spring Boot 4.1.0、Maven。
 - Spring MVC、MyBatis XML、MySQL 8.x。
 - JUnit 5、Spring Boot Test、MockMvc。
 - Spring Security、JWT、BCrypt。
