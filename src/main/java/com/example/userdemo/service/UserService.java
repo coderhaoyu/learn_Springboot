@@ -41,17 +41,8 @@ public class UserService {
     }
 
 
-//    private final List<User> userList = new ArrayList<>(List.of(new User(1L, "阿西", 38),
-//            new User(2L, "阿光", 83)));
-
     public PageResult<UserVo> findPage(UserPageQueryRequest userPageQueryRequest) {
-//        List<User> userList = userMapper.findAll();
-//        List<UserVo> userVoList = new ArrayList<>();
-//        for(User user : userList){
-//            UserVo userVo = convertToVo(user);
-//            userVoList.add(userVo);
-//        }
-//        return  userVoList;
+
         int page = userPageQueryRequest.getPage();
         int size = userPageQueryRequest.getSize();
         long total = userMapper.count();
@@ -64,16 +55,6 @@ public class UserService {
         return new PageResult<UserVo>(userVoList, total, page, size);
 
     }
-
-//    public User findById(long id) {
-//        List<User> users = this.findAll();
-//        for (User user : users) {
-//            if (user.getId() == id) {
-//                return user;
-//            }
-//        }
-//        return null;
-//    }
 
     public UserVo findById(long id) {
         User user = userMapper.findById(id);
