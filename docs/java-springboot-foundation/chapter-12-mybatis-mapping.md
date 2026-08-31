@@ -165,7 +165,7 @@ mybatis.configuration.map-underscore-to-camel-case=true
 
 ### 12.9 动态 SQL
 
-任务模块会根据可选筛选条件拼接查询条件。动态 SQL 的思路是：
+挑战和打卡列表会根据可选筛选条件拼接查询条件。动态 SQL 的思路是：
 
 ```text
 固定 SELECT、FROM

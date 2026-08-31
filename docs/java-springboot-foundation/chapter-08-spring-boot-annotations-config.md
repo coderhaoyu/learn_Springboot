@@ -102,21 +102,21 @@ Java 代码保持稳定
 
 事务表示一组数据库操作要么全部成功，要么全部回滚。
 
-例如创建项目需要：
+例如完成情侣绑定需要：
 
 ```text
-插入 projects
+插入 couples
     ↓
-插入 project_members（负责人）
+更新 couple_invitations 为已使用
 ```
 
 如果第二步失败，第一步也应该回滚。事务边界通常放在 Service 的业务方法上：
 
 ```java
 @Transactional
-public void createProject(ProjectCreateRequest request) {
-    // 插入项目
-    // 插入负责人成员记录
+public void bindCouple(CoupleBindRequest request) {
+    // 创建情侣关系
+    // 更新邀请状态
 }
 ```
 

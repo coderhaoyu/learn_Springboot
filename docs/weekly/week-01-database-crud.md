@@ -1,162 +1,121 @@
-# 第 1 周：完成真正的数据库 CRUD
+# 第 1 周：用户数据库 CRUD
 
-> 建议投入：15–18 小时  
+> 建议投入：15–18 小时
 > 对应总计划：[PLAN.md](../../PLAN.md)
+> 产品设计：[我们的冒险](../couple-challenge-design.md)
 
 ## 当前目标
 
-把当前基于 `List<User>` 的内存版用户模块迁移到 MySQL，并补齐新增、列表、详情、修改、删除五个接口。
-
-本周只追求一条清晰的数据访问链路：
+把当前用户模块作为整个应用的后端基础，确认一条完整的数据访问链路：
 
 ```text
 HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 ```
 
+本周不开发情侣、挑战和前端功能，只把用户新增、详情、分页、修改、删除做稳定。
+
+## 当前已有基础
+
+重点阅读和检查：
+
+- `src/main/java/com/example/userdemo/controller/UserController.java`；
+- `src/main/java/com/example/userdemo/service/UserService.java`；
+- `src/main/java/com/example/userdemo/mapper/UserMapper.java`；
+- `src/main/resources/mapper/UserMapper.xml`；
+- `src/main/java/com/example/userdemo/entity/User.java`；
+- `sql/schema.sql`；
+- `src/main/resources/application.properties`。
+
 ## 本周完成标准
 
-- [x] MySQL 通过 Docker 容器运行，能使用客户端连接。
-- [x] `users` 表包含主键、姓名、年龄、邮箱和创建/更新时间。
-- [x] 邮箱具有唯一约束。
-- [x] 项目添加 MyBatis 和 MySQL 驱动，并能成功连接数据库。
-- [x] 用户新增、列表、详情、修改、删除全部读写 MySQL。
-- [x] 应用重启后，之前新增的数据仍然存在。
-- [x] 能解释 `#{参数}` 如何绑定，以及查询列如何映射到 `User`。
+- [ ] `users` 表结构、主键、唯一约束和时间字段能够解释；
+- [ ] 用户新增、详情、分页、修改、删除全部访问 MySQL；
+- [ ] 应用重启后数据仍然存在；
+- [ ] Mapper 接口和 XML 的 namespace、方法 id、参数名称匹配；
+- [ ] 能解释自增主键如何回填到 Java 对象；
+- [ ] 能解释 `#{}` 参数如何进入 SQL；
+- [ ] Controller 不直接调用 Mapper；
+- [ ] 只验证本周涉及的用户文件和数据库脚本。
 
-## 需要关注的现有文件
+## 编写步骤
 
-- `controller/UserController.java`：补全正确的 PUT 路径和 DELETE 接口，只负责接收请求、调用 Service。
-- `service/UserService.java`：移除内存列表，改为调用 Mapper。
-- `entity/User.java`：与 `users` 表字段保持对应。
-- `repository/UserRepository.java`：当前为空。本项目确定使用 MyBatis 后，不同时保留含义重叠的 Repository；先理解原因，再决定删除或改为 Mapper。
-- `resources/application.properties`：配置数据源和 MyBatis XML 路径。
-- `pom.xml`：添加 MyBatis、MySQL 依赖。
+### 第 1 步：确认内存版和数据库版的差异
 
-建议创建：
+1. 画出用户详情请求的数据流；
+2. 说明重启应用为什么会丢失内存数据；
+3. 记录数据库持久化带来的变化；
+4. 检查每个接口的 HTTP 方法、路径参数和请求体。
 
-- `mapper/UserMapper.java`：声明数据库操作。
-- `resources/mapper/UserMapper.xml`：编写 SQL 与结果映射。
-- `sql/schema.sql`：记录可重复执行的建表脚本；自动迁移留到第 6 周。
+### 第 2 步：设计并检查 `users` 表
 
-## 每日安排
+先自己写出字段清单，再确认：
 
-### 周三：补齐内存 CRUD，建立基线（2–3 小时）
+- 哪个字段是主键；
+- 邮箱为什么需要唯一约束；
+- 哪些字段允许为空；
+- 时间由数据库还是 Java 维护；
+- 查询和修改最常用的条件是什么。
 
-目标：先弄清 HTTP 与分层，再替换存储方式。
+### 第 3 步：完成最小查询闭环
 
-1. 画出现有新增、列表、详情请求的数据流。
-2. 检查 `PUT` 路径中 `id` 是固定文本还是路径变量。
-3. 在内存版本中自己补齐修改和删除逻辑。
-4. 分别发送 POST、GET、PUT、DELETE 请求，记录请求体和返回值。
-5. 记录当前版本的局限：重启丢数据、并发不安全、查询依赖循环遍历。
+先只验证“按 id 查询”：
 
-当天产出：
+```text
+Controller 接收 id
+    ↓
+Service 调用 Mapper
+    ↓
+Mapper 找到 XML 中的 SELECT
+    ↓
+MySQL 返回一行
+    ↓
+结果映射成 User
+    ↓
+Service 转成 UserVo
+```
 
-- [x] 五个内存接口能走通。
-- [x] 一张手写或 Markdown 数据流图。
-- [x] 一份接口请求记录。
-
-检查题：`@PathVariable` 和 `@RequestBody` 分别从 HTTP 请求的哪里取得数据？
-
-### 周四：运行 MySQL 并设计表（3 小时）
-
-目标：理解 Java 对象落入关系型数据库前需要怎样的表结构。
-
-1. 在 Apple Silicon Mac 上安装并启动 Docker Desktop。
-2. 用 MySQL 8.x 容器创建开发数据库 `user_demo`。
-3. 根据当前 `User` 和后续登录需求设计 `users` 表。
-4. 明确每个字段的 SQL 类型、是否允许为空、默认值与约束。
-5. 手动执行建表脚本，插入一条数据后用 SELECT 查询。
-
-设计时回答：
-
-- 主键为什么使用 `BIGINT` 自增？
-- 邮箱唯一性为什么必须在数据库中也约束？
-- `created_at` 与 `updated_at` 由数据库还是 Java 维护？本项目先选一种并保持一致。
-
-当天产出：
-
-- [x] `users` 表字段说明。
-- [x] `sql/schema.sql` 建表脚本。
-- [x] 容器和数据库连接信息记录，但不提交真实密码。
-
-### 周五：接通 Spring Boot、MyBatis 与 MySQL（3 小时）
-
-目标：完成一次最小数据库查询闭环。
-
-1. 添加 MyBatis Starter 和 MySQL 驱动。
-2. 配置 JDBC URL、用户名和密码。
-3. 创建 `UserMapper`，先只声明“按 id 查询”。
-4. 创建对应 XML，编写 SELECT 和字段映射。
-5. 让 Service 调用 Mapper，使用详情接口验证查询。
-6. 如果启动失败，从第一个有效异常和最底层 `Caused by` 开始定位。
-
-当天产出：
-
-- [x] 应用启动时成功建立数据库连接。
-- [x] `GET /users/{id}` 返回数据库中的用户。
-- [x] 调试记录包含一次 SQL、传入参数和映射结果。
-
-检查题：Mapper 接口没有手写实现类，为什么运行时仍能被注入？
-
-### 周六：迁移完整 CRUD（4–5 小时）
-
-目标：把其余四个操作逐个迁移，每次只完成一个闭环。
+### 第 4 步：逐个迁移剩余操作
 
 建议顺序：
 
-1. 列表查询：先确认返回哪些列。
-2. 新增：观察自增主键如何回填到 Java 对象。
-3. 修改：使用 id 作为条件，观察受影响行数。
-4. 删除：使用 id 作为条件，观察受影响行数。
+1. 列表和分页；
+2. 新增；
+3. 修改；
+4. 删除。
 
 每完成一个操作都立即验证：
 
 ```text
-准备数据 → 发送请求 → 查看响应 → 查询数据库 → 重启后再次查询
+准备数据 → 发送请求 → 查看响应 → 查询数据库 → 重启应用后再次查询
 ```
-
-当天产出：
-
-- [x] Mapper 接口具备五个数据库操作。
-- [x] XML 中具备对应 SQL。
-- [x] Service 不再保存 `List<User>`。
-- [x] Controller 没有直接调用 Mapper。
-
-### 周日：回归验证与知识复盘（2–3 小时）
-
-1. 清理并重新准备一组测试数据。
-2. 按新增、详情、列表、修改、删除顺序完成全流程。
-3. 测试不存在的 id，先记录当前实际行为；规范异常放到第 2 周。
-4. 重启应用并确认数据持久化。
-5. 不看代码，口述一次详情查询和一次新增请求的完整流程。
-6. 整理本周仍不理解的问题，下周先解决最关键的三项。
 
 ## 验证清单
 
-| 场景 | 操作 | 预期检查 |
-|---|---|---|
-| 新增 | POST 用户数据 | 数据库新增一行且主键生成 |
-| 列表 | GET 用户列表 | 返回数据库现有记录 |
-| 详情 | GET 指定 id | SQL 条件与路径 id 一致 |
-| 修改 | PUT 指定 id | 只修改目标记录 |
-| 删除 | DELETE 指定 id | 只删除目标记录 |
-| 持久化 | 重启应用再 GET | 数据没有丢失 |
+| 场景 | 检查内容 |
+|---|---|
+| 新增用户 | 数据库出现新记录，主键正确生成 |
+| 查询详情 | 返回记录与数据库一致 |
+| 分页查询 | `LIMIT`、`OFFSET` 和总数正确 |
+| 修改用户 | 只有目标 id 的记录发生变化 |
+| 删除用户 | 删除后再次查询得到不存在结果 |
+| 重启应用 | 已有数据仍然存在 |
+| 重复邮箱 | 为第 2 周的业务冲突处理准备数据 |
 
 ## 本周暂不处理
 
-- DTO、VO 和统一响应。
-- 完整参数校验和全局异常。
-- 分页、认证、事务与复杂测试。
-
-这些内容分别进入后续周，避免第一周同时引入太多概念。
+- 注册和登录；
+- 密码摘要；
+- JWT；
+- 情侣绑定；
+- 挑战和打卡；
+- 前端工程；
+- 复杂并发控制。
 
 ## 周末复盘问题
 
-1. 为什么 Controller 不应该直接操作 Mapper？
-2. Entity 的属性名与数据库列名不一致时，MyBatis 如何映射？
-3. INSERT、UPDATE、DELETE 返回的整数代表什么？
-4. 数据库唯一约束与 Java 代码中的重复检查有什么区别？
-5. 从请求进入到 JSON 返回，哪一步发生了 Java 对象与 SQL 参数的转换？
-
-只有能独立回答其中至少 4 题，并完成验收清单，才进入第 2 周。
+1. `@PathVariable` 和 `@RequestBody` 分别从请求的哪里取得数据？
+2. Mapper 接口没有手写实现类，为什么仍然可以注入？
+3. XML 中的 `namespace` 和接口全限定名有什么关系？
+4. 查询结果为什么先映射成 Entity，再转换为 VO？
+5. 为什么分页通常需要列表查询和总数查询两条 SQL？
+6. 数据库唯一约束和 Service 查重分别解决什么问题？

@@ -57,7 +57,7 @@ public ApiResponse<UserVo> getUserInfoById(@PathVariable long id) {
 }
 ```
 
-适合资源编号：用户 id、项目 id、任务 id。
+适合资源编号：用户 id、情侣关系 id、挑战 id、打卡 id。
 
 ### 9.4 `@RequestParam`
 

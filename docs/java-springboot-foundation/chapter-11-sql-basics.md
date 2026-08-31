@@ -203,7 +203,7 @@ FROM users;
 
 ```sql
 SELECT status, COUNT(*)
-FROM tasks
+FROM couple_challenges
 GROUP BY status;
 ```
 
@@ -212,10 +212,10 @@ GROUP BY status;
 当数据分布在多张表中，需要通过关联字段组合查询：
 
 ```sql
-SELECT p.id, p.name, u.name AS owner_name
-FROM projects p
-JOIN users u ON u.id = p.owner_id
-WHERE p.id = 1;
+SELECT cc.id, ch.title, cc.points
+FROM couple_challenges cc
+JOIN challenges ch ON ch.id = cc.challenge_id
+WHERE cc.couple_id = 1;
 ```
 
 阅读 JOIN 时先找：
@@ -249,18 +249,19 @@ ROLLBACK;
 索引帮助数据库更快定位数据，但会增加写入和维护成本：
 
 ```sql
-CREATE INDEX idx_tasks_project_status
-ON tasks (project_id, status);
+CREATE INDEX idx_check_ins_challenge_date
+ON check_ins (couple_challenge_id, check_in_date);
 ```
 
 使用执行计划：
 
 ```sql
 EXPLAIN
-SELECT id, title
-FROM tasks
-WHERE project_id = 1
-  AND status = 'TODO';
+SELECT id, check_in_date
+FROM check_ins
+WHERE couple_challenge_id = 1
+  AND check_in_date >= '2026-01-01'
+  AND check_in_date < '2026-02-01';
 ```
 
 设计索引前先问：

@@ -57,4 +57,14 @@ WHERE 条件：
 
 完成后，对照当前 `/Users/wuhaoyu/IdeaProjects/user-demo/src/main/java/com/example/userdemo/service/UserService.java`，找出相同点和不同点。
 
----
+## 任务 4：阅读产品设计并画关系图
+
+阅读：[产品设计：我们的冒险](../couple-challenge-design.md)，先不写代码，完成：
+
+1. 画出 `users`、`couples`、`challenges`、`couple_challenges` 和 `check_ins` 的关系；
+2. 标出每个接口的当前用户来源；
+3. 写出“同一天重复打卡”为什么不能只依赖前端按钮；
+4. 选择一个情侣绑定接口，写出 Controller、Service、Mapper 各自负责什么；
+5. 说明为什么前端阶段必须等后端 DTO/VO 契约稳定后再开始。
+
+这份设计练习先由你完成，后续开发每个模块前再回来看，不直接把设计文档当成代码答案。

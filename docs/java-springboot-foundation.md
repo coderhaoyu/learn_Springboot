@@ -2,6 +2,10 @@
 
 本手册已经拆分为“每章一个 Markdown 文件”，请从下面的目录进入：
 
+当前产品设计：
+
+- [我们的冒险：情侣共同挑战与时光记录](couple-challenge-design.md)
+
 - [章节目录与学习总览](java-springboot-foundation/README.md)
 - [每周学习路线](java-springboot-foundation/weekly-roadmap.md)
 - [当前项目代码对照表](java-springboot-foundation/project-code-map.md)

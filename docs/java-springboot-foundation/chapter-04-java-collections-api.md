@@ -81,7 +81,7 @@ Objects.equals(firstId, secondId)
 
 ### 4.5 常见日期类型
 
-后续用户、项目和任务表会涉及时间字段，优先认识：
+后续用户、情侣、挑战和打卡表会涉及时间字段，优先认识：
 
 - `LocalDate`：只有日期；
 - `LocalDateTime`：日期和时间；

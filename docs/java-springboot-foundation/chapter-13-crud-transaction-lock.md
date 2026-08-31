@@ -66,13 +66,13 @@ FROM users;
 
 ### 13.4 事务边界
 
-创建项目和负责人成员记录属于一个业务动作：
+创建情侣关系并把邀请码改为已使用，属于一个业务动作：
 
 ```text
-insert project
-    +
-insert project_member
-    =
+insert couple
+    ↓
+update couple_invitation
+    ↓
 一个完整业务事务
 ```
 
@@ -80,10 +80,10 @@ insert project_member
 
 ### 13.5 乐观锁
 
-任务表可以增加 `version` 字段：
+情侣参与挑战的记录可以增加 `version` 字段，用于练习积分或进度的并发更新：
 
 ```text
-读取任务时得到 version = 3
+读取参与记录时得到 version = 3
     ↓
 更新时要求 id 匹配且 version = 3
     ↓
@@ -93,8 +93,8 @@ insert project_member
 概念 SQL：
 
 ```sql
-UPDATE tasks
-SET title = #{title},
+UPDATE couple_challenges
+SET points = #{points},
     version = version + 1
 WHERE id = #{id}
   AND version = #{version};

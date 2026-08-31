@@ -3,6 +3,8 @@
 > 本目录把原来的长文档拆成“每章一个 Markdown 文件”，适合按章节逐个学习。
 >
 > 项目路径：`/Users/wuhaoyu/IdeaProjects/user-demo`
+>
+> 当前产品设计：[我们的冒险：情侣共同挑战与时光记录](../couple-challenge-design.md)
 
 ## 学习方式
 
@@ -72,17 +74,20 @@
 | 阶段 | 先学章节 | 对应详细计划 |
 |---|---|---|
 | 基础补课 | 第 1–6 章 | [基础补课路线](weekly-roadmap.md) |
-| 第 1 周：数据库 CRUD | 第 1、2、6、9、11、12、13 章 | [week-01](../weekly/week-01-database-crud.md) |
-| 第 2 周：规范 CRUD | 第 2、4、8、9、10、13、14 章 | [week-02](../weekly/week-02-standard-crud.md) |
-| 第 3 周：认证与权限 | 第 5、7、8、9、10、15 章 | [week-03](../weekly/week-03-auth-security.md) |
-| 第 4 周：项目与成员 | 第 3、7、8、11、13 章 | [week-04](../weekly/week-04-project-member.md) |
-| 第 5 周：任务与复杂查询 | 第 2、3、11、12、13 章 | [week-05](../weekly/week-05-task-query.md) |
-| 第 6 周：测试与工程质量 | 第 11、12、13、14 章 | [week-06](../weekly/week-06-test-quality.md) |
-| 第 7 周：部署与收尾 | 第 8、14、15 章 | [week-07](../weekly/week-07-deployment.md) |
-| 最终验收：任务评论 | 全部章节，重点第 3、9–14 章 | [week-08](../weekly/week-08-final-assessment.md) |
+| 第 1 周：用户数据库 CRUD | 第 1、2、6、9、11、12、13 章 | [week-01](../weekly/week-01-database-crud.md) |
+| 第 2 周：规范接口与异常 | 第 2、4、8、9、10、13、14 章 | [week-02](../weekly/week-02-standard-crud.md) |
+| 第 3 周：认证与安全 | 第 5、7、8、9、10、15 章 | [week-03](../weekly/week-03-auth-security.md) |
+| 第 4 周：情侣绑定与关系权限 | 第 3、7、8、11、13、15 章 | [week-04](../weekly/week-04-couple-binding.md) |
+| 第 5 周：挑战与参与关系 | 第 2、3、11、12、13 章 | [week-05](../weekly/week-05-challenge-participation.md) |
+| 第 6 周：打卡、进度与并发 | 第 2、3、11、12、13、14 章 | [week-06](../weekly/week-06-checkin-concurrency.md) |
+| 第 7 周：时光记录与纪念日 | 第 2、3、9、10、11、12、13 章 | [week-07](../weekly/week-07-moment-anniversary.md) |
+| 第 8 周：测试、交付与独立验收 | 第 11–15 章 | [week-08](../weekly/week-08-final-assessment.md) |
+
+当前八周全部属于后端阶段。前端模块已经在产品设计文档中确定，待后端结业后再单独开始。
 
 ## 辅助资料
 
+- [完整产品设计](../couple-challenge-design.md)：查看前后端模块、数据模型、API 和版本边界。
 - [每周学习路线](weekly-roadmap.md)：把章节和每周任务串起来。
 - [当前项目代码对照表](project-code-map.md)：按文件理解现有代码。
 - [第一次学习任务](exercises.md)：先做方法和请求链路练习。
