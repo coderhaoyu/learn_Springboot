@@ -20,7 +20,7 @@
 
 学习投入：每周 15–20 小时，其中约 70% 编码、20% 测试调试、10% 阅读总结。
 
-基础语法与框架补课手册：[`docs/java-springboot-foundation.md`](docs/java-springboot-foundation.md)。
+基础语法与框架补课手册：[`docs/java-springboot-foundation/README.md`](docs/java-springboot-foundation/README.md)。
 
 ## 结业项目设计
 
