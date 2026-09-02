@@ -4,6 +4,7 @@ import com.example.ouradventure.common.response.ApiResponse;
 import com.example.ouradventure.dto.LoginRequest;
 import com.example.ouradventure.dto.RegisterRequest;
 import com.example.ouradventure.service.AuthService;
+import com.example.ouradventure.vo.LoginVo;
 import com.example.ouradventure.vo.UserVo;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
@@ -30,10 +31,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<UserVo> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ApiResponse<LoginVo> login(@Valid @RequestBody LoginRequest loginRequest) {
 
-        UserVo userVo = authService.login(loginRequest);
-        return ApiResponse.ok(userVo);
+        LoginVo loginVo = authService.login(loginRequest);
+        return ApiResponse.ok(loginVo);
     }
 
 }

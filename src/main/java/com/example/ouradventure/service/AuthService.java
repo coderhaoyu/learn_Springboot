@@ -1,11 +1,13 @@
 package com.example.ouradventure.service;
 
 import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.common.security.JwtService;
 import com.example.ouradventure.coverter.UserConverter;
 import com.example.ouradventure.dto.LoginRequest;
 import com.example.ouradventure.dto.RegisterRequest;
 import com.example.ouradventure.entity.User;
 import com.example.ouradventure.mapper.UserMapper;
+import com.example.ouradventure.vo.LoginVo;
 import com.example.ouradventure.vo.UserVo;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +22,12 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    private final JwtService jwtService;
+
+    public AuthService(UserMapper userMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public void registerUser(RegisterRequest registerRequest) {
@@ -48,7 +53,7 @@ public class AuthService {
     }
 
 
-    public UserVo login(LoginRequest loginRequest) {
+    public LoginVo login(LoginRequest loginRequest) {
 
         String password = loginRequest.getPassword();
         String email = loginRequest.getEmail().trim().toLowerCase(Locale.ROOT);
@@ -58,11 +63,16 @@ public class AuthService {
             throw new BusinessException(401, "邮箱或密码错误");
         }
 
-        if(!passwordEncoder.matches(password,user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BusinessException(401, "邮箱或密码错误");
         }
 
-        return UserConverter.toVo(user);
+        LoginVo loginVo = new LoginVo();
+        loginVo.setUser(UserConverter.toVo(user));
+        loginVo.setToken(jwtService.generateToken(user.getId()));
+        loginVo.setExpiresIn(jwtService.getExpireSeconds());
+
+        return loginVo;
 
     }
 
