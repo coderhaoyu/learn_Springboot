@@ -1,13 +1,14 @@
-package com.example.userdemo.service;
+package com.example.ouradventure.service;
 
-import com.example.userdemo.common.exception.BusinessException;
-import com.example.userdemo.common.response.PageResult;
-import com.example.userdemo.dto.CreateUserRequest;
-import com.example.userdemo.dto.UpdateUserRequest;
-import com.example.userdemo.dto.UserPageQueryRequest;
-import com.example.userdemo.entity.User;
-import com.example.userdemo.mapper.UserMapper;
-import com.example.userdemo.vo.UserVo;
+import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.common.response.PageResult;
+import com.example.ouradventure.coverter.UserConverter;
+import com.example.ouradventure.dto.CreateUserRequest;
+import com.example.ouradventure.dto.UpdateUserRequest;
+import com.example.ouradventure.dto.UserPageQueryRequest;
+import com.example.ouradventure.entity.User;
+import com.example.ouradventure.mapper.UserMapper;
+import com.example.ouradventure.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import java.nio.BufferUnderflowException;
@@ -26,20 +27,6 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    private UserVo convertToVo(User user) {
-        if (user == null) {
-            return null;
-        }
-
-        UserVo vo = new UserVo();
-        vo.setId(user.getId());
-        vo.setAge(user.getAge());
-        vo.setEmail(user.getEmail());
-        vo.setName(user.getName());
-
-        return vo;
-    }
-
 
     public PageResult<UserVo> findPage(UserPageQueryRequest userPageQueryRequest) {
 
@@ -50,7 +37,7 @@ public class UserService {
 
         List<User> userList = userMapper.findByPage(offset, size);
 
-        List<UserVo> userVoList = userList.stream().map(this::convertToVo).toList();
+        List<UserVo> userVoList = userList.stream().map(UserConverter::toVo).toList();
 
         return new PageResult<UserVo>(userVoList, total, page, size);
 
@@ -61,7 +48,7 @@ public class UserService {
         if (user == null) {
             throw new BusinessException(404, "用户不存在");
         }
-        return convertToVo(user);
+        return UserConverter.toVo(user);
     }
 
     public void addUser(CreateUserRequest createUserRequest) {
@@ -105,7 +92,7 @@ public class UserService {
 
         User user = userMapper.findUserByEmail(email);
 
-        return convertToVo(user);
+        return UserConverter.toVo(user);
     }
 
 

@@ -18,11 +18,11 @@ HTTP 请求 → UserController → UserService → UserMapper → MySQL → JSON
 
 重点阅读和检查：
 
-- `src/main/java/com/example/userdemo/controller/UserController.java`；
-- `src/main/java/com/example/userdemo/service/UserService.java`；
-- `src/main/java/com/example/userdemo/mapper/UserMapper.java`；
+- `src/main/java/com/example/ouradventure/controller/UserController.java`；
+- `src/main/java/com/example/ouradventure/service/UserService.java`；
+- `src/main/java/com/example/ouradventure/mapper/UserMapper.java`；
 - `src/main/resources/mapper/UserMapper.xml`；
-- `src/main/java/com/example/userdemo/entity/User.java`；
+- `src/main/java/com/example/ouradventure/entity/User.java`；
 - `sql/schema.sql`；
 - `src/main/resources/application.properties`。
 

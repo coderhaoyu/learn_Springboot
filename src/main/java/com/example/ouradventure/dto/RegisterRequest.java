@@ -1,4 +1,4 @@
-package com.example.userdemo.dto;
+package com.example.ouradventure.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank
-    @Size(min = 6,max = 20,message = "6-20字之间")
+    @Size(min = 6,max = 20,message = "密码长度在6-20位之间")
     private String password;
 
 

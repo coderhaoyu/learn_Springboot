@@ -1,4 +1,4 @@
-package com.example.userdemo.config;
+package com.example.ouradventure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

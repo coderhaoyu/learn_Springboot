@@ -1,13 +1,13 @@
-package com.example.userdemo.controller;
+package com.example.ouradventure.controller;
 
-import com.example.userdemo.common.response.ApiResponse;
-import com.example.userdemo.common.response.PageResult;
-import com.example.userdemo.dto.CreateUserRequest;
-import com.example.userdemo.dto.UpdateUserRequest;
-import com.example.userdemo.dto.UserPageQueryRequest;
-import com.example.userdemo.service.UserService;
-import com.example.userdemo.entity.User;
-import com.example.userdemo.vo.UserVo;
+import com.example.ouradventure.common.response.ApiResponse;
+import com.example.ouradventure.common.response.PageResult;
+import com.example.ouradventure.dto.CreateUserRequest;
+import com.example.ouradventure.dto.UpdateUserRequest;
+import com.example.ouradventure.dto.UserPageQueryRequest;
+import com.example.ouradventure.service.UserService;
+import com.example.ouradventure.entity.User;
+import com.example.ouradventure.vo.UserVo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

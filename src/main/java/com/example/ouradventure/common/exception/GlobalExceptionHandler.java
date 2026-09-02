@@ -1,6 +1,6 @@
-package com.example.userdemo.common.exception;
+package com.example.ouradventure.common.exception;
 
-import com.example.userdemo.common.response.ApiResponse;
+import com.example.ouradventure.common.response.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,8 +1,8 @@
-package com.example.userdemo.dto;
+package com.example.ouradventure.dto;
 
 import jakarta.validation.constraints.*;
 
-public class UpdateUserRequest {
+public class CreateUserRequest {
 
     @NotBlank(message = "姓名不能为空")
     @Size(min = 2, max = 20, message = "姓名长度必须在2到20之间")

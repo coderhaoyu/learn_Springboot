@@ -1,4 +1,4 @@
-package com.example.userdemo.common.response;
+package com.example.ouradventure.common.response;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.userdemo.entity;
+package com.example.ouradventure.entity;
 
 public class User {
     private Long id;

@@ -1,7 +1,7 @@
-package com.example.userdemo.mapper;
+package com.example.ouradventure.mapper;
 
-import com.example.userdemo.dto.UpdateUserRequest;
-import com.example.userdemo.entity.User;
+import com.example.ouradventure.dto.UpdateUserRequest;
+import com.example.ouradventure.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,5 +21,7 @@ public interface UserMapper {
     void deleteUser(long id);
 
     User findUserByEmail(String email);
+
+    User findAuthUserByEmail(String email);
 }
 

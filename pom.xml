@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>user-demo</artifactId>
+    <artifactId>our-adventure</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-demo</name>
-    <description>user-demo</description>
+    <name>our-adventure</name>
+    <description>我们的冒险：情侣共同挑战与时光记录应用</description>
     <url/>
     <licenses>
         <license/>

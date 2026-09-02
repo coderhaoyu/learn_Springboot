@@ -395,7 +395,7 @@ V1 只练习单体应用中的数据一致性，不引入分布式锁：
 现有用户代码先不为了目录形式强行搬迁。新增模块按业务分包，等用户模块稳定后再统一整理：
 
 ```text
-src/main/java/com/example/userdemo/
+src/main/java/com/example/ouradventure/
 ├── common/
 │   ├── exception/
 │   ├── response/

@@ -1,9 +1,12 @@
-package com.example.userdemo.service;
+package com.example.ouradventure.service;
 
-import com.example.userdemo.common.exception.BusinessException;
-import com.example.userdemo.dto.RegisterRequest;
-import com.example.userdemo.entity.User;
-import com.example.userdemo.mapper.UserMapper;
+import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.coverter.UserConverter;
+import com.example.ouradventure.dto.LoginRequest;
+import com.example.ouradventure.dto.RegisterRequest;
+import com.example.ouradventure.entity.User;
+import com.example.ouradventure.mapper.UserMapper;
+import com.example.ouradventure.vo.UserVo;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ public class AuthService {
 
     public void registerUser(RegisterRequest registerRequest) {
 
-        User existUser = userMapper.findUserByEmail(registerRequest.getEmail());
+        User existUser = userMapper.findUserByEmail(registerRequest.getEmail().trim().toLowerCase(Locale.ROOT));
 
         if (existUser != null) {
             throw new BusinessException(409, "邮箱已被注册");
@@ -42,6 +45,25 @@ public class AuthService {
         } catch (DuplicateKeyException e) {
             throw new BusinessException(409, "邮箱已被注册");
         }
+    }
+
+
+    public UserVo login(LoginRequest loginRequest) {
+
+        String password = loginRequest.getPassword();
+        String email = loginRequest.getEmail().trim().toLowerCase(Locale.ROOT);
+
+        User user = userMapper.findAuthUserByEmail(email);
+        if (user == null) {
+            throw new BusinessException(401, "邮箱或密码错误");
+        }
+
+        if(!passwordEncoder.matches(password,user.getPassword())){
+            throw new BusinessException(401, "邮箱或密码错误");
+        }
+
+        return UserConverter.toVo(user);
+
     }
 
 }
