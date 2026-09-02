@@ -1,8 +1,10 @@
+import { Outlet } from 'react-router-dom';
+
+/** H5 页面容器：限制最大宽度、处理安全区，具体内容由子路由渲染。 */
 const App = () => (
-  <main className="app-shell">
-    <h1>我们的冒险</h1>
-    <p>React 前端工程骨架已就绪。</p>
-  </main>
+  <div className="app-shell">
+    <Outlet />
+  </div>
 );
 
 export default App;

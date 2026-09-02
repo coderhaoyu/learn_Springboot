@@ -1,0 +1,85 @@
+/**
+ * H5 适配核心。
+ *
+ * 方案：vw 计算根字号 + postcss-pxtorem 把 px 换算成 rem。
+ * 设计稿基准 375px，1rem = 37.5px，所以 CSS 里写的 px 数值就是设计稿上量到的数值。
+ *
+ * 视口 375px 时 10vw = 37.5px，页面 1:1 还原设计稿；
+ * 视口变宽变窄都按比例缩放，直到 --shell-max-width 停止放大。
+ *
+ * 注意：下面的 html 块被 postcss-pxtorem 的 selectorBlackList 排除，
+ * px 原样保留。不要把需要等比缩放的尺寸写在这里。
+ */
+html {
+  /* 48px = 37.5px × (480 / 375)，和下面的 --shell-max-width 是同一个比例，两者必须成对修改 */
+  font-size: min(10vw, 48px);
+
+  /* 超过这个宽度不再放大，页面居中显示，宽屏下相当于一个手机视口 */
+  --shell-max-width: 480px;
+
+  /* 胶囊圆角：只要足够大就行，不需要跟着视口缩放 */
+  --r-full: 999px;
+}
+
+/**
+ * 页面容器。所有路由都渲染在它内部，安全区内边距统一在这里处理，
+ * 页面自身只关心内容排版。
+ */
+.app-shell {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: var(--shell-max-width);
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  margin: 0 auto;
+  padding-top: var(--safe-top);
+  padding-right: var(--safe-right);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  background: var(--c-bg);
+}
+
+/* 宽屏下给容器加投影，和页面底色区分开 */
+@media (min-width: 481px) {
+  .app-shell {
+    box-shadow: var(--sd-md);
+  }
+}
+
+/* 可滚动区域：保留 iOS 惯性滚动，并阻止滚动链传递到外层 */
+.scroll-y {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* 高分屏 1px 细线：CSS 1px 在 2x/3x 屏上偏粗，用缩放压到物理 1px */
+.hairline-bottom {
+  position: relative;
+}
+
+.hairline-bottom::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--c-line);
+  content: '';
+  transform-origin: 0 100%;
+}
+
+@media (min-resolution: 2dppx) {
+  .hairline-bottom::after {
+    transform: scaleY(0.5);
+  }
+}
+
+@media (min-resolution: 3dppx) {
+  .hairline-bottom::after {
+    transform: scaleY(0.33333);
+  }
+}

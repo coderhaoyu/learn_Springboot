@@ -1,0 +1,163 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 56px 24px 32px;
+  /* 右上角一抹暖色，避免整页纯白 */
+  background:
+    radial-gradient(140% 55% at 88% -12%, #ffe3ea 0%, rgba(255, 227, 234, 0) 62%),
+    var(--c-bg);
+}
+
+.brand {
+  margin-bottom: 36px;
+}
+
+.logo {
+  display: flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: var(--sd-sm);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: var(--c-ink-sub);
+  font-size: var(--fs-base);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formError {
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+  font-size: var(--fs-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: var(--c-ink-sub);
+  font-size: var(--fs-sm);
+}
+
+.control {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 8px;
+  /* 右侧留窄一点，给 44px 的按钮热区腾位置 */
+  padding: 0 6px 0 14px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.control:focus-within {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-soft);
+}
+
+.controlInvalid {
+  border-color: var(--c-danger);
+}
+
+.controlInvalid:focus-within {
+  box-shadow: 0 0 0 3px var(--c-danger-soft);
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  /* 16px：iOS 上小于 16px 的输入框聚焦时会触发缩放 */
+  font-size: var(--fs-md);
+}
+
+.toggle {
+  display: flex;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  align-items: center;
+  justify-content: center;
+  color: var(--c-primary-strong);
+  font-size: var(--fs-sm);
+}
+
+.fieldError {
+  color: var(--c-danger);
+  font-size: var(--fs-xs);
+}
+
+.submit {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-strong) 100%);
+  box-shadow: var(--sd-primary);
+  color: var(--c-ink-invert);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submit:disabled {
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: var(--r-full);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.footnote {
+  /* 撑到页面底部，键盘弹出时不会遮住登录按钮 */
+  margin-top: auto;
+  padding-top: 32px;
+  color: var(--c-ink-weak);
+  font-size: var(--fs-xs);
+  text-align: center;
+}

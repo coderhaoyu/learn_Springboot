@@ -1,0 +1,54 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 40px 24px 32px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.greeting {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+
+.email {
+  margin-top: 6px;
+  color: var(--c-ink-weak);
+  font-size: var(--fs-sm);
+}
+
+.card {
+  padding: 20px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: var(--sd-sm);
+}
+
+.cardTitle {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.cardText {
+  margin-top: 8px;
+  color: var(--c-ink-sub);
+  font-size: var(--fs-base);
+}
+
+.signOut {
+  min-height: 48px;
+  margin-top: auto;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-full);
+  background: var(--c-surface);
+  color: var(--c-ink-sub);
+  font-size: var(--fs-md);
+}
+
+.signOut:active {
+  background: var(--c-bg-deep);
+}

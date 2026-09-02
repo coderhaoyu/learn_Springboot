@@ -1,43 +1,54 @@
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #1f2933;
-  background: #fffdf9;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
-
-* {
-  box-sizing: border-box;
-}
+/**
+ * 全局样式入口，被 src/main.tsx 引入。
+ * 顺序：设计变量 -> 基础重置 -> H5 适配 -> 全局基础样式。
+ */
+@import './tokens.css';
+@import './reset.css';
+@import './adaptive.css';
 
 html,
-body,
-#root {
-  min-height: 100%;
-  margin: 0;
+body {
+  height: 100%;
 }
 
 body {
-  min-width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: var(--fs-base);
+  font-synthesis: none;
+  line-height: 1.5;
+  color: var(--c-ink);
+  /* 宽屏下露出的底色，和居中的 .app-shell 区分开 */
+  background: var(--c-bg-deep);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 点击时不要出现灰色高亮块 */
+  -webkit-tap-highlight-color: transparent;
+  /* 去掉移动端 300ms 点击延迟，同时禁掉双击缩放 */
+  touch-action: manipulation;
+  /* 禁止横向滚动和整页下拉回弹 */
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  text-rendering: optimizeLegibility;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-.app-shell {
-  display: grid;
+#root {
+  display: flex;
+  /* dvh 跟随移动端地址栏收起展开变化，100vh 作为老设备兜底 */
   min-height: 100vh;
-  place-content: center;
-  gap: 0.5rem;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100dvh;
+  flex-direction: column;
 }
 
-.app-shell h1,
-.app-shell p {
-  margin: 0;
+/* 只给读屏软件的文本 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
