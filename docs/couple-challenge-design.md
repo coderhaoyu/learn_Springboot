@@ -169,7 +169,9 @@ V1 只使用系统预置挑战，避免一开始加入复杂的挑战编辑器�
 
 ## 5. 前端模块设计
 
-前端暂时只做设计，不立即创建工程。后端接口稳定后，前端可以放在仓库根目录的 `frontend/` 中。
+前端先在仓库根目录的 `frontend/` 中创建 React 工程骨架；业务页面和接口联调在后端接口稳定后实现。
+
+前端技术栈使用 React、TypeScript、Vite、React Router、Zustand 和 Axios。
 
 ### 5.1 页面模块
 
@@ -430,7 +432,7 @@ frontend/
 │   ├── stores/
 │   ├── types/
 │   ├── views/
-│   └── App.vue
+│   └── App.tsx
 └── package.json
 ```
 

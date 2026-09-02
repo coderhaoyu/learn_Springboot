@@ -110,16 +110,16 @@
 
 ### 后续前端阶段
 
-如果没有特别偏好，前端使用：
+前端使用：
 
-- Vue 3；
+- React；
 - TypeScript；
 - Vite；
-- Vue Router；
-- Pinia；
-- Axios 或原生 `fetch`。
+- React Router；
+- Zustand；
+- Axios。
 
-前端技术只在后端接口稳定后引入，不提前分散当前学习重点。
+前端工程骨架可以先建立；业务页面和接口联调仍在后端接口稳定后进行。
 
 ## 5. 后端模块总览
 
@@ -294,7 +294,7 @@ HTTP → Controller → Service → Mapper → MySQL → JSON
 
 ### 前端阶段一：工程和认证
 
-- 创建 `frontend/`；
+- 初始化 `frontend/` 前端工程骨架；
 - 配置路由、请求层和状态管理；
 - 完成注册、登录、退出；
 - 处理 Token 和路由守卫。
