@@ -1,5 +1,7 @@
 package com.example.ouradventure.common.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +20,14 @@ import java.util.Date;
 @Component
 public class JwtService {
 
-    /** 签名密钥，构造时派生一次，之后不再变化 */
+    /**
+     * 签名密钥，构造时派生一次，之后不再变化
+     */
     private final SecretKey secretKey;
 
-    /** token 有效期，单位分钟 */
+    /**
+     * token 有效期，单位分钟
+     */
     private final long expireMinutes;
 
     public JwtService(@Value("${app.jwt.secret}") String secret,
@@ -48,8 +54,27 @@ public class JwtService {
                 .compact();
     }
 
-    /** token 有效期，单位秒，用于返回给前端 */
+    /**
+     * token 有效期，单位秒，用于返回给前端
+     */
     public long getExpireSeconds() {
         return expireMinutes * 60;
+    }
+
+    /**
+     * 校验 token 并取出用户 ID。
+     *
+     * @throws io.jsonwebtoken.JwtException 签名不符、格式错误或已过期
+     * @throws NumberFormatException        sub 不是合法的数字
+     */
+    public long parseUserId(String token) {
+        Jws<Claims> jws = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token);
+
+        String subject = jws.getPayload().getSubject();
+
+        return Long.parseLong(subject);
     }
 }
