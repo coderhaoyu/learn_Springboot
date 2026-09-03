@@ -449,8 +449,8 @@ public void commence(HttpServletRequest request, HttpServletResponse response,
 | 业务接口默认要求登录 | 已完成（`anyRequest().authenticated()`） |
 | 无 token / 错误 token / 过期 token 返回 401 | 已完成 |
 | 密码、摘要、token 不出现在响应中 | 已完成（`UserVo` 里没有 password 字段） |
-| `GET /users/me` 返回当前用户 | **未做**，用 7.4 的方式取 userId |
-| 已认证但无权限返回 403 | **未做**，需要先有角色（见 7.3 的 authorities） |
+| `GET /users/me` 返回当前用户 | 已完成（`UserController#getCurrentUserInfo`，用的是 7.4 的 `@AuthenticationPrincipal` 写法） |
+| 已认证但无权限返回 403 | 2026-09-03 移出第 3 周：本应用没有管理员角色，403 改到第 4 周按资源归属在 Service 里判 |
 
 第二层结束。**到这里为止，四个文件的每一行你都知道在做什么了。**
 

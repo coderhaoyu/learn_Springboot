@@ -11,6 +11,8 @@ import com.example.ouradventure.vo.UserVo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,12 +40,6 @@ public class UserController {
         return ApiResponse.ok(user);
     }
 
-    @PostMapping()
-    public ApiResponse<Boolean> addUser(@Valid @RequestBody CreateUserRequest userData) {
-        userService.addUser(userData);
-        return ApiResponse.ok(true);
-    }
-
     @PutMapping("/{id}")
     public ApiResponse<Boolean> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserRequest userData) {
         userService.updateUser(id, userData);
@@ -59,6 +55,19 @@ public class UserController {
     @GetMapping("/by-email")
     public ApiResponse<UserVo> getUserInfoByEmail(@RequestParam @NotBlank(message = "邮箱不能为空") @Email(message = "邮箱不正确") String email) {
         UserVo user = userService.getUserInfoByEmail(email);
+        return ApiResponse.ok(user);
+    }
+
+//    @GetMapping("/me")
+//    public ApiResponse<UserVo> getCurrentUserInfo() {
+//        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserVo user = userService.findById(userId);
+//        return ApiResponse.ok(user);
+//    }
+
+    @GetMapping("/me")
+    public ApiResponse<UserVo> getCurrentUserInfo(@AuthenticationPrincipal Long userId) {
+        UserVo user = userService.findById(userId);
         return ApiResponse.ok(user);
     }
 }

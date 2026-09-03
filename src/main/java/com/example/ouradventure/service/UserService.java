@@ -51,19 +51,6 @@ public class UserService {
         return UserConverter.toVo(user);
     }
 
-    public void addUser(CreateUserRequest createUserRequest) {
-        UserVo user = getUserInfoByEmail(createUserRequest.getEmail());
-        if (user != null) {
-            throw new BusinessException(409, "邮箱已存在");
-        }
-        User newUser = new User();
-        newUser.setName(createUserRequest.getName());
-        newUser.setAge(createUserRequest.getAge());
-        newUser.setEmail(createUserRequest.getEmail());
-        userMapper.addUser(newUser);
-
-
-    }
 
     public void updateUser(long id, UpdateUserRequest updateUserRequest) {
         findById(id);
