@@ -41,3 +41,16 @@ INSERT INTO users (name, age, email) VALUES
 ('韩梅', 24, 'hanmei@example.com'),
 ('曹磊', 33, 'caolei@example.com'),
 ('曾敏', 29, 'zengmin@example.com');
+
+CREATE TABLE couples
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    user_a_id  BIGINT      NOT NULL COMMENT '关系一方，存id较小的一方',
+    user_b_id  BIGINT      NOT NULL COMMENT '关系另一方，存id较大的一方',
+    status     VARCHAR(20) NOT NULL COMMENT '关系状态 ACTIVE/ENDED',
+    bound_at   DATETIME    NOT NULL COMMENT '绑定时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_user_pair (user_a_id, user_b_id),
+    KEY idx_user_b_id (user_b_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
