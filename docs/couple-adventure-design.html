@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我们的冒险 · 界面设计参考</title>
+<style>
+:root{
+  color-scheme: light;
+  --sheet:#E5E3DE; --sheet-ink:#26252A; --sheet-mut:#6E6B72; --sheet-line:#D2CFC9;
+  --bg:#F2F2EF; --card:#FFFFFF; --ink:#1F1E20; --mut:#77747A; --faint:#A9A6AC;
+  --line:#E4E3DF; --me:#1F1E20; --ta:#A33A50; --ta-soft:#F6E9EC; --ta-line:#EBD3D8;
+  --r-s:10px; --r-m:14px;
+  --ui:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --song:"Songti SC","Source Han Serif SC","Noto Serif SC","STSong",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--sheet);color:var(--sheet-ink);font-family:var(--ui);
+  -webkit-font-smoothing:antialiased;padding:52px 30px 90px;line-height:1.55}
+.wrap{max-width:1240px;margin:0 auto}
+.mast{border-bottom:1px solid var(--sheet-line);padding-bottom:22px}
+.mast h1{font-family:var(--song);font-size:31px;font-weight:600;letter-spacing:.01em}
+.mast p{color:var(--sheet-mut);font-size:14.5px;max-width:64ch;margin-top:9px}
+.sec{margin-top:52px}
+.sec>h2{font-size:17.5px;font-weight:600;letter-spacing:.01em;
+  padding-bottom:9px;border-bottom:1px solid var(--sheet-line);display:flex;align-items:baseline}
+.sec>h2 .v{margin-left:auto;font-size:12px;font-weight:400;color:var(--sheet-mut)}
+.sec>.note{color:var(--sheet-mut);font-size:14px;max-width:76ch;margin-top:11px}
+.grid{display:flex;flex-wrap:wrap;gap:30px 26px;margin-top:26px}
+figure{width:302px}
+figcaption{margin-top:11px;font-size:13px;color:var(--sheet-mut)}
+figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600;margin-bottom:2px}
+
+/* ---------- phone shell ---------- */
+.ph{width:302px;height:626px;background:var(--bg);border:1px solid #D6D3CE;
+  border-radius:30px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(40,36,30,.10),0 10px 26px -12px rgba(40,36,30,.22)}
+.st{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;font-size:11px;color:var(--mut);letter-spacing:.02em}
+.st i{font-style:normal;font-variant-numeric:tabular-nums}
+.nav{flex:none;padding:4px 18px 12px;display:flex;align-items:baseline;justify-content:space-between}
+.nav h3{font-size:19px;font-weight:600;letter-spacing:.01em;color:var(--ink)}
+.nav .act{font-size:13px;color:var(--ta)}
+.nav .bk{font-size:13px;color:var(--mut)}
+.bd{flex:1;overflow:hidden;padding:0 18px}
+.bd.pad{padding-bottom:14px}
+/* ---------- tab bar ---------- */
+.tabs{flex:none;height:54px;border-top:1px solid var(--line);background:var(--card);
+  display:flex;align-items:center;padding:0 6px}
+.tabs a{flex:1;text-align:center;font-size:11px;color:var(--faint);text-decoration:none}
+.tabs a span{display:block;font-size:15px;line-height:20px;margin-bottom:1px;color:var(--faint)}
+.tabs a.on,.tabs a.on span{color:var(--ink)}
+
+/* ---------- primitives ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:14px}
+.card+.card{margin-top:10px}
+.t-lab{font-size:12px;color:var(--mut)}
+.t-sub{font-size:12.5px;color:var(--mut);line-height:1.5}
+.t-bd{font-size:13.5px;color:var(--ink);line-height:1.6}
+.t-ti{font-size:15px;font-weight:600;color:var(--ink)}
+.song{font-family:var(--song)}
+.num{font-variant-numeric:tabular-nums}
+.hr{height:1px;background:var(--line);margin:12px 0}
+.btn{display:block;width:100%;text-align:center;background:var(--ta);color:#fff;border:0;
+  border-radius:var(--r-s);padding:12px;font-size:14.5px;font-family:var(--ui);cursor:pointer}
+.btn.gh{background:transparent;color:var(--ink);border:1px solid #CFCCD2}
+.btn.off{background:#E8E7E3;color:var(--faint)}
+.btn.sm{padding:9px;font-size:13px}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--ta);outline-offset:2px}
+.chip{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:999px;
+  background:var(--ta-soft);color:var(--ta);border:1px solid var(--ta-line)}
+.chip.q{background:#EFEFEC;color:var(--mut);border-color:var(--line)}
+.row{display:flex;align-items:center;gap:10px}
+.row.tp{align-items:flex-start}
+.sp{margin-left:auto}
+.av{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-size:11px;color:#fff;background:var(--me)}
+.av.ta{background:var(--ta)}
+.av.lg{width:44px;height:44px;font-size:15px}
+.av.gh{background:transparent;border:1px dashed #C6C3C9;color:var(--faint)}
+.who{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--mut)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--me);flex:none}
+.dot.ta{background:var(--ta)}
+.fld{border-bottom:1px solid var(--line);padding:12px 0;display:flex;align-items:center}
+.fld .k{font-size:13.5px;color:var(--mut);width:76px;flex:none}
+.fld .v{font-size:14px;color:var(--ink)}
+.fld .v.hint{color:var(--faint)}
+/* ---------- progress ring (the one bold moment) ---------- */
+.ring{width:124px;height:124px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--ta) calc(var(--p)*1%),#E7E6E2 0)}
+.ring>div{width:102px;height:102px;border-radius:50%;background:var(--card);
+  display:grid;place-items:center;text-align:center;line-height:1.2}
+.ring .n{font-family:var(--song);font-size:38px;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
+.ring em{font-style:normal;font-size:11.5px;color:var(--mut)}
+.stats{display:flex;text-align:center}
+.stats>div{flex:1}
+.stats .n{font-family:var(--song);font-size:23px;color:var(--ink);font-variant-numeric:tabular-nums;display:block;line-height:1.25}
+.stats .k{font-size:11.5px;color:var(--mut)}
+
+/* ---------- mood + achievements ---------- */
+.mood{display:flex;gap:5px;flex-wrap:wrap}
+.mood b{font-size:11.5px;font-weight:400;padding:4px 9px;border:1px solid var(--line);
+  border-radius:999px;color:var(--mut);background:var(--card)}
+.mood b.on{border-color:var(--ta);color:var(--ta);background:var(--ta-soft)}
+.bdgs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 8px;text-align:center}
+.bdg i{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;
+  font-size:18px;font-style:normal;background:var(--ta-soft);color:var(--ta);border:1px solid var(--ta-line)}
+.bdg b{display:block;font-size:11.5px;font-weight:400;color:var(--ink)}
+.bdg em{font-style:normal;font-size:10.5px;color:var(--faint)}
+.bdg.lk i{background:#EFEEEA;color:#C7C4CA;border:1px dashed #D6D3D8}
+.bdg.lk b{color:var(--faint)}
+.bar{height:4px;border-radius:2px;background:#E7E6E2;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ta)}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;padding-left:20px}
+.tl::before{content:"";position:absolute;left:5px;top:6px;bottom:4px;width:1px;background:var(--line)}
+.tl-i{position:relative;padding-bottom:15px}
+.tl-i::before{content:"";position:absolute;left:-18px;top:6px;width:7px;height:7px;
+  border-radius:50%;background:var(--me);box-shadow:0 0 0 3px var(--bg)}
+.tl-i.ta::before{background:var(--ta)}
+.tl-d{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;margin-bottom:4px}
+/* ---------- empty state + calendar ---------- */
+.mt{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 12px 30px}
+.mt .gl{width:56px;height:56px;border-radius:50%;border:1px dashed #C9C6CC;margin-bottom:16px;
+  display:grid;place-items:center;font-size:20px;color:var(--faint)}
+.mt h4{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:7px}
+.mt p{font-size:13px;color:var(--mut);line-height:1.65;max-width:30ch}
+.mt .btn{width:auto;padding:11px 22px;margin-top:18px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal span{font-size:10.5px;color:var(--faint);padding:3px 0}
+.cal b{font-size:12px;font-weight:400;color:var(--ink);padding:5px 0;border-radius:7px;
+  position:relative;font-variant-numeric:tabular-nums}
+.cal b.dim{color:#C4C1C7}
+.cal b.on{background:var(--card);color:var(--ta);font-weight:600;box-shadow:inset 0 0 0 1px var(--ta)}
+.cal b.ok{background:var(--ta-soft);color:var(--ta)}
+.cal b.miss{color:#8E8B92}
+.cal b.miss::after{content:"";position:absolute;left:50%;bottom:2px;transform:translateX(-50%);
+  width:9px;height:1px;background:#C9C6CC}
+.lgd{display:flex;gap:12px;margin-top:9px}
+.lgd span{font-size:11px;color:var(--mut);display:inline-flex;align-items:center;gap:4px}
+.lgd i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.seg{display:flex;gap:6px;margin-top:10px}
+.seg b{flex:1;text-align:center;font-size:12.5px;font-weight:400;padding:8px 0;
+  border:1px solid var(--line);border-radius:var(--r-s);color:var(--mut);background:var(--card)}
+.seg b.on{border-color:var(--ta);color:var(--ta);background:var(--ta-soft)}
+.code{font-family:var(--song);font-size:23px;letter-spacing:.14em;color:var(--ta)}
+
+/* ---------- spec blocks ---------- */
+.spec{display:flex;flex-wrap:wrap;gap:26px;margin-top:24px}
+.pan{background:#EFEDE9;border:1px solid var(--sheet-line);border-radius:var(--r-m);padding:20px;flex:1;min-width:330px}
+.pan h3{font-size:14px;font-weight:600;margin-bottom:14px}
+.sw{display:flex;flex-wrap:wrap;gap:12px}
+.sw div{width:88px}
+.sw i{display:block;height:52px;border-radius:8px;border:1px solid rgba(30,26,20,.12)}
+.sw b{display:block;font-size:12px;font-weight:500;margin-top:6px}
+.sw em{font-style:normal;font-size:11px;color:var(--sheet-mut);font-variant-numeric:tabular-nums}
+.ty>div{display:flex;align-items:baseline;gap:14px;padding:7px 0;border-bottom:1px solid var(--sheet-line)}
+.ty>div:last-child{border:0}
+.ty p{flex:1;color:var(--ink)}
+.ty code{font-size:11px;color:var(--sheet-mut);white-space:nowrap}
+.four{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px}
+.four>div{width:262px;background:var(--bg);border:1px solid var(--sheet-line);
+  border-radius:var(--r-m);padding:14px}
+.four .lb{font-size:12px;color:var(--sheet-mut);margin-bottom:10px}
+@media(max-width:760px){body{padding:34px 18px 70px}.pan{min-width:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="mast">
+  <h1>我们的冒险 · 界面设计参考</h1>
+  <p>按你的设计文档出稿，屏与文档里的九个前端页面模块一一对应，并标出 V1 与 V1.5 的边界。核心闭环是绑定伴侣、加入共同挑战、每日打卡、累计进度与成就，所以首页的主角是挑战进度和今天有没有打卡，不是纪念日。视觉沿用你选的克制中性底 + 单一强调色。</p>
+</div>
+
+<section class="sec">
+  <h2>设计基底</h2>
+  <p class="note">强调色只出现在三个地方：主操作按钮、进度已完成的部分、当前选中项。其余交给中性色和留白。刻意避开粉红＋爱心的品类默认，用胭脂红做唯一情绪色。</p>
+  <div class="spec">
+    <div class="pan">
+      <h3>色板</h3>
+      <div class="sw">
+        <div><i style="background:#F2F2EF"></i><b>页面底</b><em>#F2F2EF</em></div>
+        <div><i style="background:#FFFFFF"></i><b>卡片</b><em>#FFFFFF</em></div>
+        <div><i style="background:#1F1E20"></i><b>正文墨</b><em>#1F1E20</em></div>
+        <div><i style="background:#77747A"></i><b>次级文字</b><em>#77747A</em></div>
+        <div><i style="background:#A33A50"></i><b>胭脂强调</b><em>#A33A50</em></div>
+        <div><i style="background:#F6E9EC"></i><b>强调浅底</b><em>#F6E9EC</em></div>
+        <div><i style="background:#E7E6E2"></i><b>进度未完成</b><em>#E7E6E2</em></div>
+        <div><i style="background:#E4E3DF"></i><b>分隔线</b><em>#E4E3DF</em></div>
+      </div>
+      <div class="hr" style="background:var(--sheet-line);margin:16px 0 12px"></div>
+      <h3 style="margin-bottom:8px">归属色与共同内容</h3>
+      <p class="t-sub">我＝墨色，TA＝胭脂色，用在头像、时光记录的时间线节点上。但打卡按文档规则是一条共同记录、任意一方提交，所以打卡不能用归属色暗示归属，只在卡片里写清提交人：<b style="font-weight:600">林代表你们打了今天的卡</b>。这一句必须有，否则另一方会以为自己还没打。</p>
+      <div class="row" style="margin-top:12px;gap:18px">
+        <span class="who"><i class="dot"></i>我创建的</span>
+        <span class="who"><i class="dot ta"></i>TA 创建的</span>
+        <span class="who"><i class="dot" style="width:16px;border-radius:3px;background:linear-gradient(90deg,#1F1E20 50%,#A33A50 50%)"></i>共同打卡</span>
+      </div>
+    </div>
+    <div class="pan">
+      <h3>字阶</h3>
+      <div class="ty">
+        <div><p class="song num" style="font-size:36px;line-height:1">10</p><code>宋体 38 · 进度环内</code></div>
+        <div><p style="font-size:19px;font-weight:600">一起早睡三十天</p><code>苹方 Semibold 19</code></div>
+        <div><p style="font-size:15px;font-weight:600">今天还没有打卡</p><code>苹方 Semibold 15</code></div>
+        <div><p style="font-size:13.5px">今天两个人都十一点前躺下了，破了纪录。</p><code>苹方 Regular 13.5 / 1.6</code></div>
+        <div><p style="font-size:12.5px;color:var(--mut)">连续 8 天 · 积分 150</p><code>苹方 Regular 12.5</code></div>
+        <div><p style="font-size:11.5px;color:var(--faint)">还差 22 天</p><code>苹方 Regular 11.5 · 徽章副文案</code></div>
+      </div>
+      <p class="t-sub" style="margin-top:14px">两款字：界面全用苹方，宋体只留给进度环里的天数、连续天数和纪念日倒计时这类「成绩数字」，一屏最多出现一次。所有数字开 tabular-nums，天数每天变化时不会跳宽。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>V1 核心闭环<span class="v">对应 auth / couple / challenge / checkin</span></h2>
+  <p class="note">按文档的闭环顺序排。绑定是第一个流失点，所以邀请页只做一件事；打卡是留存的全部，所以首页必须一眼看出今天打没打。</p>
+  <div class="grid">
+
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="bd" style="padding-top:34px">
+        <h2 class="song" style="font-size:27px;font-weight:600;color:var(--ink);line-height:1.35">我们的冒险</h2>
+        <p class="t-sub" style="margin-top:8px">两个人的挑战、打卡和记录，只有你们能看到。</p>
+        <div class="card" style="margin-top:26px">
+          <div class="fld" style="padding-top:2px"><span class="k">邮箱</span><span class="v hint">you@example.com</span></div>
+          <div class="fld" style="border:0"><span class="k">密码</span><span class="v hint">至少 8 位</span></div>
+        </div>
+        <div style="margin-top:18px"><button class="btn">登录</button></div>
+        <button class="btn gh sm" style="margin-top:9px">注册新账号</button>
+        <p class="t-sub" style="text-align:center;margin-top:16px">第一版只用邮箱密码，没有第三方登录</p>
+      </div>
+    </div>
+    <figcaption><b>1 · 登录 / 注册</b>文档里第一版没有第三方登录，所以不留微信按钮的位置——先画上再删比一开始就不画贵。副标题一句话说清私密性，这是这类产品的注册前提。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>绑定伴侣</h3></div>
+      <div class="bd pad">
+        <div class="row" style="margin:6px 0 18px"><span class="av lg">吴</span>
+          <span class="t-sub">＋</span><span class="av lg gh">?</span></div>
+        <div class="card" style="border-color:var(--ta-line);background:var(--ta-soft)">
+          <div class="t-lab">把这串码给 TA</div>
+          <div class="row" style="margin:8px 0 4px"><span class="code num">4 7 2 9 1 5</span></div>
+          <div class="t-sub">3 天内有效，只能用一次</div>
+          <div class="hr" style="background:var(--ta-line)"></div>
+          <button class="btn sm">复制邀请码</button>
+        </div>
+        <div class="card">
+          <div class="t-ti">绑定之后能做什么</div>
+          <p class="t-sub" style="margin-top:7px">挑战、打卡、时光记录和纪念日都属于两个人，所以这些功能要等绑定完成才会打开。</p>
+        </div>
+        <button class="btn gh sm" style="margin-top:14px">我有 TA 的邀请码</button>
+        <p class="t-sub" style="text-align:center;margin-top:14px">也可以先<span style="color:var(--ta)">看看有哪些挑战</span></p>
+      </div>
+    </div>
+    <figcaption><b>2 · 生成邀请码</b>一屏一件事。这里有个要提前决定的取舍：文档的数据模型把挑战和记录都挂在情侣关系上，未绑定用户其实无事可做。建议至少放开挑战目录的只读浏览，否则邀请没成功那一刻就是流失。</figcaption>
+  </figure>
+
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><span class="bk">‹ 返回</span></div>
+      <div class="bd pad">
+        <h3 style="font-size:19px;font-weight:600;color:var(--ink);margin-bottom:6px">输入 TA 的邀请码</h3>
+        <p class="t-sub">六位数字，区分不了大小写的问题就不存在了。</p>
+        <div class="row" style="gap:6px;margin:20px 0 0">
+          <b class="song num" style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--ta);border-radius:8px;color:var(--ink)">4</b>
+          <b class="song num" style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink)">7</b>
+          <b class="song num" style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink)">2</b>
+          <b class="song num" style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink)">9</b>
+          <b style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--faint)">·</b>
+          <b style="flex:1;text-align:center;font-size:22px;font-weight:400;padding:10px 0;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--faint)">·</b>
+        </div>
+        <div class="card" style="margin-top:16px;border-color:var(--ta-line)">
+          <div class="t-ti" style="color:var(--ta)">这个邀请码已经被使用</div>
+          <p class="t-sub" style="margin-top:6px">邀请码只能用一次。让 TA 重新生成一个新的给你。</p>
+        </div>
+        <p class="t-sub" style="margin-top:16px">失败原因分三种，文案要分开写：<br>不存在 · 已过期 · 已被使用。</p>
+      </div>
+    </div>
+    <figcaption><b>3 · 输入邀请码（含失败态）</b>后端对邀请码有唯一、有效期、一次性三条规则，前端就得有三种对应文案。合并成「邀请码无效」会让用户反复重试同一个码。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="bd pad">
+        <div class="row" style="margin:8px 0 12px">
+          <span class="av">吴</span><span class="av ta">林</span>
+          <span class="t-sub num">在一起 1 284 天</span>
+        </div>
+        <div class="card">
+          <div class="row"><span class="song" style="font-size:17px;font-weight:600;color:var(--ink)">一起早睡三十天</span>
+            <span class="sp chip">进行中</span></div>
+          <div class="ring" style="--p:33;margin:14px auto 12px"><div>
+            <span class="n">10</span><em>共 30 天</em></div></div>
+          <div class="hr"></div>
+          <div class="stats">
+            <div><span class="n">8</span><span class="k">连续天数</span></div>
+            <div><span class="n">150</span><span class="k">累计积分</span></div>
+            <div><span class="n">19</span><span class="k">还剩天数</span></div>
+          </div>
+        </div>
+        <div class="card" style="border-color:var(--ta-line);background:var(--ta-soft)">
+          <div class="row"><span class="t-ti">今天还没有打卡</span><span class="sp t-lab">9 月 4 日</span></div>
+          <div class="hr" style="background:var(--ta-line)"></div>
+          <button class="btn sm">打今天的卡</button>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-bd">三周年</span><span class="sp song num" style="font-size:19px;color:var(--ta)">12<span style="font-size:11px;font-family:var(--ui);color:var(--mut);margin-left:2px">天</span></span></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <a class="on" href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>4 · 首页（核心屏）</b>进度环是全屏唯一的重音，因为这个产品的成就感来自「进行到第几天」。「今天还没有打卡」用强调浅底整块提起来——它是唯一每天都要触发的动作。在一起天数退成顶部一行，不和进度抢戏。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="bd">
+        <div class="mt">
+          <div class="gl">◌</div>
+          <h4>还没有和 TA 绑定</h4>
+          <p>挑战、打卡和记录都属于两个人，绑定之后这里会变成你们的进度。</p>
+          <button class="btn">生成邀请码</button>
+          <p style="margin-top:14px">或者<span style="color:var(--ta)">输入 TA 给你的码</span></p>
+        </div>
+      </div>
+      <div class="tabs">
+        <a class="on" href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>5 · 首页未绑定空态</b>这是新用户看到的第一屏，出现频率被低估。不放灰色的假进度环占位：一个明确动作比一个假装有内容的骨架屏更有用。空状态的正文要说清为什么现在是空的，而不只是说空。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>挑战</h3></div>
+      <div class="bd pad">
+        <div class="seg" style="margin-top:0">
+          <b class="on">全部</b><b>生活习惯</b><b>一起运动</b><b>心动</b>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="row"><span class="t-ti">一起早睡三十天</span><span class="sp chip">进行中</span></div>
+          <p class="t-sub" style="margin-top:6px">30 天 · 每天 15 分 · 今天是第 12 天</p>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-ti">每天走六千步</span><span class="sp chip q">可加入</span></div>
+          <p class="t-sub" style="margin-top:6px">21 天 · 每天 10 分</p>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-ti">一周三次一起做饭</span><span class="sp chip q">可加入</span></div>
+          <p class="t-sub" style="margin-top:6px">28 天 · 每天 20 分</p>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-ti">每天互相说一件小事</span><span class="sp chip q">可加入</span></div>
+          <p class="t-sub" style="margin-top:6px">14 天 · 每天 10 分</p>
+        </div>
+        <div class="card" style="background:transparent;border-style:dashed">
+          <p class="t-sub">挑战由系统预置，第一版不支持自定义。</p>
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a class="on" href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>6 · 挑战列表</b>卡片只放天数、每日积分和状态这三个决策所需的信息。这里有一条待你拍板的规则：同时能不能进行多个挑战。如果只能一个，其余卡片的加入入口要直接置灰并说明原因，否则用户会点进详情才被拒绝。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><span class="bk">‹ 返回</span></div>
+      <div class="bd pad">
+        <h3 class="song" style="font-size:21px;font-weight:600;color:var(--ink)">每天走六千步</h3>
+        <p class="t-sub" style="margin-top:6px">21 天 · 每天 10 分 · 一起运动</p>
+        <div class="card" style="margin-top:16px">
+          <div class="t-ti">怎么算完成</div>
+          <p class="t-bd" style="margin-top:7px">每天有一条属于你们两个人的打卡，任意一方提交就算这天完成，不需要两个人各打一次。</p>
+          <div class="hr"></div>
+          <p class="t-sub">中断不会清零已完成的天数，但连续天数会从头算。</p>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-lab">开始日期</span><span class="sp t-bd num">加入当天</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-lab">预计结束</span><span class="sp t-bd num">9 月 24 日</span></div>
+        </div>
+        <button class="btn" style="margin-top:16px">和 TA 一起开始</button>
+        <p class="t-sub" style="text-align:center;margin-top:11px">一个人点就能开始，会记在你们两个人名下</p>
+      </div>
+    </div>
+    <figcaption><b>7 · 挑战详情与加入</b>规则卡是这一屏真正的主体：共同打卡的语义要在加入之前讲清楚，之后每天都少一次困惑。按文档单方即可 join，所以按钮文案写成「和 TA 一起开始」而不是「加入」，并在下面点明这是代表两个人的动作。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><span class="bk">取消</span><span class="act">提交</span></div>
+      <div class="bd pad">
+        <h3 style="font-size:19px;font-weight:600;color:var(--ink)">打今天的卡</h3>
+        <p class="t-sub" style="margin-top:5px">9 月 4 日 · 一起早睡三十天 · 第 12 天</p>
+        <div class="card" style="margin-top:16px">
+          <div class="t-lab">今天的心情</div>
+          <div class="mood" style="margin-top:9px">
+            <b class="on">踏实</b><b>开心</b><b>平静</b><b>累</b><b>有点低落</b><b>甜</b>
+          </div>
+        </div>
+        <div class="card">
+          <div class="t-lab">想说一句（可以不写）</div>
+          <p class="t-bd" style="margin-top:8px;color:var(--faint);line-height:1.7">今天两个人都十一点前躺下了，破了纪录。</p>
+        </div>
+        <button class="btn" style="margin-top:16px">提交打卡</button>
+        <p class="t-sub" style="text-align:center;margin-top:11px">提交后今天就完成了，TA 不用再打一次</p>
+      </div>
+    </div>
+    <figcaption><b>8 · 今日打卡</b>心情是文档里 check_ins 自带的字段，做成一行可点的词而不是表情，省掉图形资产也省掉解释成本。备注明确标注可以不写，降低每天的提交摩擦——这是留存里唯一每天都要跨过的门槛。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>打卡记录</h3><span class="act">8 月 24 日 起</span></div>
+      <div class="bd pad">
+        <div class="card">
+          <div class="stats">
+            <div><span class="n">10</span><span class="k">已完成</span></div>
+            <div><span class="n">8</span><span class="k">连续</span></div>
+            <div><span class="n">150</span><span class="k">积分</span></div>
+          </div>
+          <div class="hr"></div>
+          <div class="cal">
+            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+            <b class="ok">24</b><b class="ok">25</b><b class="miss">26</b><b class="ok">27</b><b class="ok">28</b><b class="ok">29</b><b class="ok">30</b>
+            <b class="ok">31</b><b class="ok">1</b><b class="ok">2</b><b class="ok">3</b><b class="on">4</b><b class="dim">5</b><b class="dim">6</b>
+            <b class="dim">7</b><b class="dim">8</b><b class="dim">9</b><b class="dim">10</b><b class="dim">11</b><b class="dim">12</b><b class="dim">13</b>
+            <b class="dim">14</b><b class="dim">15</b><b class="dim">16</b><b class="dim">17</b><b class="dim">18</b><b class="dim">19</b><b class="dim">20</b>
+            <b class="dim">21</b><b class="dim">22</b>
+          </div>
+          <div class="lgd">
+            <span><i style="background:var(--ta-soft);box-shadow:inset 0 0 0 1px var(--ta-line)"></i>已完成</span>
+            <span><i style="background:var(--card);box-shadow:inset 0 0 0 1px var(--ta)"></i>今天</span>
+            <span><i style="background:#EFEEEA;position:relative"><em style="position:absolute;left:1px;bottom:1px;width:9px;height:1px;background:#C9C6CC;display:block"></em></i>断掉</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row tp"><span class="av ta">林</span>
+            <div style="flex:1">
+              <div class="t-lab num">9 月 3 日 · 踏实</div>
+              <p class="t-bd" style="margin-top:3px">两个人都十一点前躺下了。</p>
+            </div></div>
+          <div class="hr"></div>
+          <div class="row tp"><span class="av">吴</span>
+            <div style="flex:1">
+              <div class="t-lab num">9 月 2 日 · 累</div>
+              <p class="t-bd" style="margin-top:3px">加班到十点半，还是关灯了。</p>
+            </div></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a class="on" href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>9 · 打卡记录与日历</b>日历按挑战周期排，不按自然月——30 天的挑战里用户真正想知道的是还剩几格。三种格子状态要能一眼分开：已完成填色、今天描边、断掉留一道短横线而不是红叉，看得见但不指责。没有推送的产品里，这道缺口就是唯一的补救提示。</figcaption>
+  </figure>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>V1.5 扩展<span class="v">对应 moment / anniversary / achievement / dashboard</span></h2>
+  <p class="note">这四块都建立在已经有打卡数据之上，所以放在核心闭环之后。时光记录按文档只有文本、心情和可见性——没有图片位，界面就不留图片位。</p>
+  <div class="grid">
+
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>时光记录</h3><span class="act">写一条</span></div>
+      <div class="bd pad">
+        <div class="tl" style="margin-top:4px">
+          <div class="tl-i ta">
+            <div class="tl-d">9 月 2 日 · 林 · 平静</div>
+            <p class="t-bd">早睡这件事居然真的坚持下来了。今晚十点四十就熄灯，听见他呼吸变慢的时候我还醒着。</p>
+          </div>
+          <div class="tl-i">
+            <div class="tl-d">8 月 29 日 · 吴 · 甜 <span class="chip q" style="margin-left:4px">只有我能看到</span></div>
+            <p class="t-bd">她今天问我三周年要去哪，我其实已经订好了。</p>
+          </div>
+          <div class="tl-i ta">
+            <div class="tl-d">8 月 24 日 · 林 · 开心</div>
+            <p class="t-bd">今天开始第一个挑战。一个月后再来看这条。</p>
+          </div>
+          <div class="tl-i">
+            <div class="tl-d">8 月 20 日 · 吴 · 踏实</div>
+            <p class="t-bd">把两个人的日程摊在一起看了一遍。</p>
+          </div>
+          <div class="tl-i ta">
+            <div class="tl-d">8 月 17 日 · 林 · 累</div>
+            <p class="t-bd">这周各自出差，视频里只来得及说一句晚安。</p>
+          </div>
+          <div class="tl-i ta">
+            <div class="tl-d">8 月 6 日 · 林 · 甜</div>
+            <p class="t-bd">她说想养猫，我说好。</p>
+          </div>
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a class="on" href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>10 · 时光记录（纯文本）</b>时间线节点用归属色区分作者，这是它和打卡最大的不同——记录是个人视角，打卡是两个人的。可见性做成跟在日期后面的小标签，写的时候就知道对方看不看得见，比藏在详情页里安全。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>纪念日</h3><span class="act">添加</span></div>
+      <div class="bd pad">
+        <div class="card" style="border-color:var(--ta-line);background:var(--ta-soft)">
+          <div class="t-lab">最近的一个</div>
+          <div class="row" style="margin-top:6px">
+            <div><div class="t-ti">三周年</div>
+              <div class="t-sub num" style="margin-top:2px">9 月 16 日 · 每年重复</div></div>
+            <div class="sp" style="text-align:right"><span class="song num" style="font-size:31px;color:var(--ta);line-height:1">12</span>
+              <span class="t-lab" style="display:block">天后</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-bd">第一次见面</span><span class="sp t-sub num">11 月 3 日 · 每年</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-bd">领证</span><span class="sp t-sub num">明年 1 月 8 日 · 每年</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-bd">第一次说喜欢</span><span class="sp t-sub num">明年 6 月 21 日 · 每年</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-bd" style="color:var(--mut)">搬到一起住</span><span class="sp t-sub num">2024 年 5 月 12 日</span></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-bd" style="color:var(--mut)">接猫回家</span><span class="sp t-sub num">2025 年 10 月 4 日</span></div>
+        </div>
+        <p class="t-sub" style="margin-top:12px">按文档，纪念日只有「是否按年重复」一个开关。不重复的那条过去之后沉到最后，保留但不再倒计时。</p>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a class="on" href="#"><span>◎</span>记录</a>
+        <a href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>11 · 纪念日</b>只有一个倒计时值得放大，就是最近的那一个，其余压成密度更高的列表。不要设计「每 100 天」这类周期提醒——文档的数据模型只支持按年重复，做了前端也算不出来。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>成就</h3><span class="act">3 / 9</span></div>
+      <div class="bd pad">
+        <div class="card">
+          <div class="bdgs">
+            <div class="bdg"><i>✓</i><b>第一次打卡</b><em>8 月 24 日</em></div>
+            <div class="bdg"><i>◈</i><b>连续七天</b><em>9 月 2 日</em></div>
+            <div class="bdg"><i>◉</i><b>满 100 分</b><em>8 月 31 日</em></div>
+            <div class="bdg lk"><i>◌</i><b>完成一个挑战</b><em>还差 19 天</em></div>
+            <div class="bdg lk"><i>◌</i><b>连续三十天</b><em>还差 22 天</em></div>
+            <div class="bdg lk"><i>◌</i><b>满 500 分</b><em>还差 350 分</em></div>
+            <div class="bdg lk"><i>◌</i><b>三个挑战</b><em>还差 3 个</em></div>
+            <div class="bdg lk"><i>◌</i><b>连续一百天</b><em>还差 92 天</em></div>
+            <div class="bdg lk"><i>◌</i><b>满 1000 分</b><em>还差 850 分</em></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-bd">连续三十天</span><span class="sp t-sub num">8 / 30</span></div>
+          <div class="bar"><i style="width:27%"></i></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-bd">满 500 分</span><span class="sp t-sub num">150 / 500</span></div>
+          <div class="bar"><i style="width:30%"></i></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a class="on" href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>12 · 成就</b>待解锁的徽章要给出还差多少，否则它只是一个灰点。虚线圈＋灰底表示未解锁，不用锁形图标——已解锁的徽章保持强调色，是这一屏唯一的颜色来源。</figcaption>
+  </figure>
+  <figure>
+    <div class="ph">
+      <div class="st"><i>9:41</i><i>●●●</i></div>
+      <div class="nav"><h3>我</h3></div>
+      <div class="bd pad">
+        <div class="card">
+          <div class="row"><span class="av lg">吴</span>
+            <div><div class="t-ti">吴昊宇</div>
+              <div class="t-sub">wuhaoyu@example.com</div></div></div>
+          <div class="hr"></div>
+          <div class="row"><span class="t-lab">和林在一起</span><span class="sp t-bd num">1 284 天</span></div>
+        </div>
+        <div class="card">
+          <div class="fld" style="padding-top:2px"><span class="k">昵称</span><span class="v">吴昊宇</span></div>
+          <div class="fld"><span class="k">生日</span><span class="v num">3 月 12 日</span></div>
+          <div class="fld" style="border:0"><span class="k">修改密码</span><span class="v hint" style="margin-left:auto">›</span></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="t-bd" style="color:var(--faint)">提醒推送</span><span class="sp t-sub">这一版还没有</span></div>
+        </div>
+        <button class="btn gh sm" style="margin-top:14px">退出登录</button>
+      </div>
+      <div class="tabs">
+        <a href="#"><span>◉</span>首页</a>
+        <a href="#"><span>◈</span>挑战</a>
+        <a href="#"><span>✓</span>打卡</a>
+        <a href="#"><span>◎</span>记录</a>
+        <a class="on" href="#"><span>◐</span>我</a>
+      </div>
+    </div>
+    <figcaption><b>13 · 个人设置</b>两个刻意的缺席：没有推送能力就不放通知开关，否则用户打开之后会等一个永远不来的提醒；结束关系按文档 V1 不开放，所以这里不留灰按钮。把「这一版还没有」写出来，比让人自己发现要好。</figcaption>
+  </figure>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>今日打卡卡片的四个状态<span class="v">首页同一个位置</span></h2>
+  <p class="note">这个位置每天被看一次，是全产品最重要的一块面积。强调色只跟着「现在该做的那一件事」走：没绑定时是绑定，今天没打卡时是打卡，挑战结束后是开下一个。已完成态一律不上色——强调色一旦出现在已完成态，用户就学不会「有颜色＝该做事」。</p>
+  <div class="four">
+    <div>
+      <div class="lb">未绑定伴侣</div>
+      <div class="card">
+        <div class="t-ti">先和 TA 绑定</div>
+        <p class="t-sub" style="margin-top:6px">打卡属于两个人，绑定之后开始。</p>
+        <div class="hr"></div>
+        <button class="btn sm">生成邀请码</button>
+      </div>
+    </div>
+    <div>
+      <div class="lb">今天还没有人打卡</div>
+      <div class="card" style="border-color:var(--ta-line);background:var(--ta-soft)">
+        <div class="row"><span class="t-ti">今天还没有打卡</span><span class="sp t-lab">9 月 4 日</span></div>
+        <div class="hr" style="background:var(--ta-line)"></div>
+        <button class="btn sm">打今天的卡</button>
+      </div>
+    </div>
+    <div>
+      <div class="lb">TA 已经代表你们打了</div>
+      <div class="card">
+        <div class="row"><span class="t-ti">今天已完成</span><span class="sp chip q">第 12 天</span></div>
+        <div class="row" style="margin-top:8px"><span class="av ta">林</span>
+          <span class="t-sub">林在 22:41 打了今天的卡</span></div>
+        <div class="hr"></div>
+        <p class="t-sub">你不需要再打一次。想补一句可以写进时光记录。</p>
+      </div>
+    </div>
+    <div>
+      <div class="lb">挑战已结束</div>
+      <div class="card">
+        <div class="row"><span class="t-ti">三十天走完了</span><span class="sp chip q">已完成</span></div>
+        <p class="t-sub" style="margin-top:6px">完成 27 天 · 最长连续 14 天 · 共 405 分</p>
+        <div class="hr"></div>
+        <button class="btn sm">挑下一个</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec">
+  <h2>落地约束<span class="v">来自文档的非目标与业务规则</span></h2>
+  <p class="note">这一节是给实现看的。文档里写明不做的东西，界面上必须提前把位置让出来，否则会做出一堆等接口的空壳。</p>
+  <div class="spec">
+    <div class="pan">
+      <h3>V1 不做的功能怎么影响界面</h3>
+      <div class="ty">
+        <div><p>没有推送和短信</p><code>提醒只能靠首页那块强调底和日历缺口</code></div>
+        <div><p>没有图片和文件存储</p><code>记录只有文本；徽章用字符和 CSS，不引图</code></div>
+        <div><p>没有第三方登录</p><code>注册页不留微信位</code></div>
+        <div><p>没有实时聊天</p><code>互动落在打卡备注和时光记录上</code></div>
+        <div><p>没有商城和支付</p><code>积分只做成绩，别放「我的积分」入口</code></div>
+      </div>
+      <p class="t-sub" style="margin-top:14px">积分这条要特别小心：叫积分，用户就会去找兑换的地方。第一版它只是进度的另一种说法，所以只在挑战进度和成就里出现，不给它独立页面。<br><br>
+        「催 TA 打卡」同理。没有推送就做不到，如果要保留这个动作，它只能是对方下次打开时看到的一条标记，文案不能写成已发送提醒。</p>
+    </div>
+    <div class="pan">
+      <h3>前端不自己算业务规则</h3>
+      <p class="t-sub">能不能打卡、连续多少天、多少积分、进度百分比，全部取服务端返回的字段，本地只做展示。三个具体后果：</p>
+      <div class="ty" style="margin-top:12px">
+        <div><p>今天的日期边界以服务端为准</p><code>跨零点本地算会两边不一致</code></div>
+        <div><p>唯一约束命中不是报错</p><code>直接刷新成已完成态，并写出提交人</code></div>
+        <div><p>并发提交要有专门文案</p><code>不能落到「网络错误」</code></div>
+      </div>
+      <p class="t-sub" style="margin-top:14px">双方同时点提交是这个产品最常见的竞态：文档用唯一约束和条件更新兜住了数据，但界面上失败的那一方看到的不该是失败——他看到的应该是「林刚刚打了今天的卡」。</p>
+    </div>
+  </div>
+  <div class="four">
+    <div>
+      <div class="lb">提交中</div>
+      <div class="card"><button class="btn sm off">提交中</button>
+        <p class="t-sub" style="margin-top:8px">按钮置灰并改文案，不用转圈图标。</p></div>
+    </div>
+    <div>
+      <div class="lb">提交成功</div>
+      <div class="card"><div class="t-ti">今天已完成</div>
+        <p class="t-sub" style="margin-top:6px">整块换成已完成态，连续天数和积分同时更新。</p></div>
+    </div>
+    <div>
+      <div class="lb">被唯一约束拒绝</div>
+      <div class="card" style="border-color:var(--ta-line)">
+        <div class="t-ti">林刚刚打了今天的卡</div>
+        <p class="t-sub" style="margin-top:6px">当成成功来展示，不弹错误提示。</p></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
+
