@@ -1,0 +1,559 @@
+/**
+ * 通用部件样式，按 docs/couple-adventure-design.html 抽出九屏里重复出现的部分，
+ * 页面只负责组合和排版。
+ *
+ * 只放跨页面复用的部件：文字角色、卡片、按钮、chip、字段行、头像与归属点、
+ * 进度、统计行、分段控件、标签组、空态、标题栏、底部导航。
+ * 只在单个页面出现的部件（日历、时间线、徽章墙）跟着各自页面走，不写在这里。
+ *
+ * 强调色规则：只出现在主操作按钮、进度已完成的部分、当前选中项，
+ * 已完成态一律不上色，否则用户学不会「有颜色＝该做事」。
+ *
+ * 字号只取字阶里的七档。文档画稿里还剩三处一次性值不在字阶上，取最近的一档：
+ * 头像里的字和底部导航 11px 取 12px，空态标题 16px 取 15px。
+ *
+ * 页面骨架（.app-shell 由 App.tsx 提供，已处理最大宽度和安全区）：
+ *
+ *   <div class="app-shell">
+ *     <header class="nav-bar">…</header>
+ *     <main class="scroll-y page-pad">…</main>
+ *     <nav class="tab-bar">…</nav>
+ *   </div>
+ */
+
+/* ==================== 文字角色 ==================== */
+
+/* 对应文档字阶，颜色一起带上，页面不用重复写 color */
+.t-title {
+  color: var(--c-ink);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.t-body {
+  color: var(--c-ink);
+  font-size: var(--fs-base);
+  line-height: var(--lh-loose);
+}
+
+.t-sub {
+  color: var(--c-ink-sub);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+.t-label {
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+}
+
+/* 徽章副文案、日历角标这类最弱的一档：字号和 .t-label 同一档，靠颜色区分 */
+.t-faint {
+  color: var(--c-ink-weak);
+  font-size: var(--fs-xs);
+}
+
+/* 成绩数字：宋体，一屏最多出现一次 */
+.song {
+  font-family: var(--ff-song);
+}
+
+/* 会变化的数字都要开，天数每天 +1 时不会跳宽 */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==================== 布局小工具 ==================== */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-card);
+}
+
+/* 一行里有多行文本时顶部对齐 */
+.row-top {
+  align-items: flex-start;
+}
+
+/* 把后面的内容顶到行尾 */
+.spacer {
+  margin-left: auto;
+}
+
+/* 卡片内的分隔线，1px 不参与 rem 换算，高分屏上就是一条细线 */
+.divider {
+  height: 1px;
+  margin: var(--sp-3) 0;
+  background: var(--c-line);
+}
+
+/* 页面左右内边距，和 .scroll-y 组合使用 */
+.page-pad {
+  padding-right: var(--pad-page);
+  padding-left: var(--pad-page);
+}
+
+/* ==================== 图标 ==================== */
+
+/* 文档没有图片资源，图标统一用线性 svg，尺寸和颜色跟着文字走 */
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+/* ==================== 卡片 ==================== */
+
+.card {
+  padding: var(--pad-card);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+}
+
+.card + .card {
+  margin-top: var(--gap-card);
+}
+
+/* 强调卡：只给「现在该做的那一件事」，一屏最多一张 */
+.card-accent {
+  border-color: var(--c-primary-line);
+  background: var(--c-primary-soft);
+}
+
+.card-accent .divider {
+  background: var(--c-primary-line);
+}
+
+/* 说明卡：写「这一版还没有什么」这类补充信息，不承载操作 */
+.card-quiet {
+  border-style: dashed;
+  background: transparent;
+}
+
+/* ==================== 按钮 ==================== */
+
+.btn {
+  display: inline-flex;
+  min-height: var(--tap-min);
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-5);
+  border-radius: var(--r-sm);
+  background: var(--c-primary);
+  color: var(--c-ink-invert);
+  font-size: var(--fs-md);
+  text-align: center;
+  transition: background 0.15s ease;
+}
+
+.btn:active {
+  background: var(--c-primary-strong);
+}
+
+/* 表单和卡片里的主操作占满一行 */
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* 次要操作：只有描边，没有底色 */
+.btn-ghost {
+  border: 1px solid var(--c-line-strong);
+  background: transparent;
+  color: var(--c-ink);
+}
+
+.btn-ghost:active {
+  background: var(--c-bg-mute);
+}
+
+/* 卡片里的小按钮。文档是 35px 左右，这里抬到 38px，仍在可点范围内 */
+.btn-sm {
+  min-height: 38px;
+  padding: 0 var(--sp-4);
+  font-size: var(--fs-sm);
+}
+
+/* 提交中和不可用：置灰并改文案，不用转圈图标 */
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  border-color: var(--c-line);
+  background: var(--c-disabled);
+  color: var(--c-ink-weak);
+}
+
+.btn-ghost:disabled {
+  background: transparent;
+}
+
+/* ==================== chip ==================== */
+
+/* 状态标记，不可点。进行中这类需要注意的状态用强调色 */
+.chip {
+  display: inline-block;
+  padding: 3px var(--sp-2);
+  border: 1px solid var(--c-primary-line);
+  border-radius: var(--r-full);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  font-size: var(--fs-xs);
+}
+
+/* 已完成、可加入这类不需要行动的状态用中性色 */
+.chip-quiet {
+  border-color: var(--c-line);
+  background: var(--c-bg-mute);
+  color: var(--c-ink-sub);
+}
+
+/* ==================== 头像与归属色 ==================== */
+
+/* 我＝墨色，TA＝胭脂色 */
+.avatar {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--c-mine);
+  color: var(--c-ink-invert);
+  font-size: var(--fs-xs);
+}
+
+.avatar-partner {
+  background: var(--c-partner);
+}
+
+.avatar-lg {
+  width: 44px;
+  height: 44px;
+  font-size: var(--fs-md);
+}
+
+/* 还没绑定时的占位 */
+.avatar-empty {
+  border: 1px dashed var(--c-line-strong);
+  background: transparent;
+  color: var(--c-ink-weak);
+}
+
+/* 归属说明：一个小圆点＋一行字 */
+.owner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+}
+
+.owner-dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: var(--r-full);
+  background: var(--c-mine);
+}
+
+.owner-dot-partner {
+  background: var(--c-partner);
+}
+
+/* 共同打卡：两个人各占一半，不暗示归属 */
+.owner-dot-shared {
+  width: 16px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--c-mine) 50%, var(--c-partner) 50%);
+}
+
+/* ==================== 字段行 ==================== */
+
+/* 表单和「我」页面的信息行，卡片里最后一行加 .field-last 去掉底线 */
+.field {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.field-last {
+  border-bottom: 0;
+}
+
+.field-key {
+  width: 76px;
+  flex: none;
+  color: var(--c-ink-sub);
+  font-size: var(--fs-base);
+}
+
+.field-value {
+  min-width: 0;
+  flex: 1;
+  color: var(--c-ink);
+  font-size: var(--fs-base);
+}
+
+/* 占位文案和还没填的值 */
+.field-value-hint {
+  color: var(--c-ink-weak);
+}
+
+/* ==================== 进度 ==================== */
+
+/*
+ * 进度环是一屏里唯一的重音，只给当前挑战的进度。--p 是已完成百分比：
+ *
+ *   <div class="ring" style={{ '--p': 33 }} role="img" aria-label="共 30 天，已完成 10 天">
+ *     <div class="ring-face">
+ *       <span class="ring-num">10</span>
+ *       <em class="ring-unit">共 30 天</em>
+ *     </div>
+ *   </div>
+ */
+
+.ring {
+  display: grid;
+  width: 124px;
+  height: 124px;
+  flex: none;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: conic-gradient(var(--c-primary) calc(var(--p, 0) * 1%), var(--c-track) 0);
+}
+
+.ring-face {
+  display: grid;
+  width: 102px;
+  height: 102px;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--c-surface);
+  line-height: var(--lh-tight);
+  text-align: center;
+}
+
+.ring-num {
+  display: block;
+  color: var(--c-ink);
+  font-family: var(--ff-song);
+  font-size: var(--fs-2xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.ring-unit {
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+  font-style: normal;
+}
+
+/* 横向进度条：成就页的「还差多少」 */
+.bar {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--c-track);
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--c-primary);
+}
+
+/* ==================== 统计行 ==================== */
+
+/* 连续天数 / 累计积分 / 还剩天数 这类等宽并排 */
+.stats {
+  display: flex;
+  text-align: center;
+}
+
+.stats > * {
+  flex: 1;
+}
+
+.stats-num {
+  display: block;
+  color: var(--c-ink);
+  font-family: var(--ff-song);
+  font-size: var(--fs-xl);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
+}
+
+.stats-key {
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+}
+
+/* ==================== 分段控件与标签组 ==================== */
+
+/* 挑战分类这类单选，选中项是强调色允许出现的第三个地方 */
+.segmented {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.segmented-item {
+  min-height: 34px;
+  flex: 1;
+  padding: var(--sp-2) 0;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  color: var(--c-ink-sub);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.segmented-item[aria-selected='true'],
+.segmented-item[aria-pressed='true'] {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+}
+
+/* 心情这类可换行的多档标签 */
+.choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.choice-item {
+  min-height: 30px;
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-full);
+  background: var(--c-surface);
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+}
+
+.choice-item[aria-pressed='true'],
+.choice-item[aria-checked='true'] {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+}
+
+/* ==================== 空态 ==================== */
+
+/* 正文要说清为什么现在是空的，并且只给一个明确动作，不放假的骨架屏 */
+.empty {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-3) var(--sp-8);
+  text-align: center;
+}
+
+.empty-glyph {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  margin-bottom: var(--sp-4);
+  border: 1px dashed var(--c-line-strong);
+  border-radius: var(--r-full);
+  color: var(--c-ink-weak);
+}
+
+.empty-title {
+  margin-bottom: var(--sp-2);
+  color: var(--c-ink);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.empty-text {
+  max-width: 30ch;
+  color: var(--c-ink-sub);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+}
+
+.empty .btn {
+  margin-top: var(--sp-5);
+}
+
+/* ==================== 标题栏 ==================== */
+
+.nav-bar {
+  display: flex;
+  min-height: var(--tap-min);
+  flex: none;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-1) var(--pad-page) var(--sp-3);
+}
+
+.nav-title {
+  color: var(--c-ink);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+/* 右上角的文字动作，它就是这一屏的主操作，允许用强调色 */
+.nav-action {
+  min-height: var(--tap-min);
+  color: var(--c-primary);
+  font-size: var(--fs-sm);
+}
+
+.nav-back {
+  min-height: var(--tap-min);
+  color: var(--c-ink-sub);
+  font-size: var(--fs-sm);
+}
+
+/* ==================== 底部导航 ==================== */
+
+/*
+ * 五个入口：首页 / 挑战 / 打卡 / 记录 / 我。
+ * 跟在 .scroll-y 之后，作为 .app-shell 的最后一个子元素，不用 fixed 定位。
+ * 负 margin 抵掉 .app-shell 的底部安全区内边距，再由自己补回来，白色才能铺到屏幕最下沿。
+ */
+.tab-bar {
+  display: flex;
+  height: calc(var(--h-tabbar) + var(--safe-bottom));
+  flex: none;
+  align-items: center;
+  margin-bottom: calc(-1 * var(--safe-bottom));
+  padding: 0 var(--sp-1) var(--safe-bottom);
+  border-top: 1px solid var(--c-line);
+  background: var(--c-surface);
+}
+
+.tab-item {
+  display: flex;
+  min-height: var(--tap-min);
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  color: var(--c-ink-sub);
+  font-size: var(--fs-xs);
+}
+
+/* 当前页用墨色而不是强调色：底部导航天天在那儿，不属于「现在该做的事」 */
+.tab-item[aria-current='page'] {
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
+}

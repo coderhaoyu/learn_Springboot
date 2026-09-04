@@ -1,10 +1,11 @@
 /**
  * 全局样式入口，被 src/main.tsx 引入。
- * 顺序：设计变量 -> 基础重置 -> H5 适配 -> 全局基础样式。
+ * 顺序：设计变量 -> 基础重置 -> H5 适配 -> 通用部件 -> 全局基础样式。
  */
 @import './tokens.css';
 @import './reset.css';
 @import './adaptive.css';
+@import './ui.css';
 
 html,
 body {
@@ -12,11 +13,10 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--ff-ui);
   font-size: var(--fs-base);
   font-synthesis: none;
-  line-height: 1.5;
+  line-height: var(--lh-base);
   color: var(--c-ink);
   /* 宽屏下露出的底色，和居中的 .app-shell 区分开 */
   background: var(--c-bg-deep);
@@ -30,6 +30,16 @@ body {
   overflow-x: hidden;
   overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
+}
+
+/* 标题只统一字重和行高，字号由页面按字阶选 */
+h1,
+h2,
+h3,
+h4 {
+  font-size: inherit;
+  font-weight: 600;
+  line-height: var(--lh-tight);
 }
 
 #root {

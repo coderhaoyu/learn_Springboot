@@ -7,7 +7,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#fffdf9" />
+    <!-- 浏览器工具栏/状态栏的底色，取值规则是「和页面最顶上那一像素同色」，
+         也就是 tokens.css 里的 --c-bg。html 里用不了 CSS 变量，改 token 时要一起改。
+         不给深色变体：全站 color-scheme: light，深色 chrome 压在浅色页面上会像坏了。 -->
+    <meta name="theme-color" content="#f2f2ef" />
     <meta name="color-scheme" content="light" />
     <!-- 禁止 iOS 把数字识别成电话、把字符串识别成地址 -->
     <meta name="format-detection" content="telephone=no, email=no, address=no" />

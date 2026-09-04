@@ -20,9 +20,9 @@ body{background:var(--sheet);color:var(--sheet-ink);font-family:var(--ui);
 .wrap{max-width:1240px;margin:0 auto}
 .mast{border-bottom:1px solid var(--sheet-line);padding-bottom:22px}
 .mast h1{font-family:var(--song);font-size:31px;font-weight:600;letter-spacing:.01em}
-.mast p{color:var(--sheet-mut);font-size:14.5px;max-width:64ch;margin-top:9px}
+.mast p{color:var(--sheet-mut);font-size:15px;max-width:64ch;margin-top:9px}
 .sec{margin-top:52px}
-.sec>h2{font-size:17.5px;font-weight:600;letter-spacing:.01em;
+.sec>h2{font-size:18px;font-weight:600;letter-spacing:.01em;
   padding-bottom:9px;border-bottom:1px solid var(--sheet-line);display:flex;align-items:baseline}
 .sec>h2 .v{margin-left:auto;font-size:12px;font-weight:400;color:var(--sheet-mut)}
 .sec>.note{color:var(--sheet-mut);font-size:14px;max-width:76ch;margin-top:11px}
@@ -55,19 +55,19 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:14px}
 .card+.card{margin-top:10px}
 .t-lab{font-size:12px;color:var(--mut)}
-.t-sub{font-size:12.5px;color:var(--mut);line-height:1.5}
-.t-bd{font-size:13.5px;color:var(--ink);line-height:1.6}
+.t-sub{font-size:13px;color:var(--mut);line-height:1.5}
+.t-bd{font-size:14px;color:var(--ink);line-height:1.6}
 .t-ti{font-size:15px;font-weight:600;color:var(--ink)}
 .song{font-family:var(--song)}
 .num{font-variant-numeric:tabular-nums}
 .hr{height:1px;background:var(--line);margin:12px 0}
 .btn{display:block;width:100%;text-align:center;background:var(--ta);color:#fff;border:0;
-  border-radius:var(--r-s);padding:12px;font-size:14.5px;font-family:var(--ui);cursor:pointer}
+  border-radius:var(--r-s);padding:12px;font-size:15px;font-family:var(--ui);cursor:pointer}
 .btn.gh{background:transparent;color:var(--ink);border:1px solid #CFCCD2}
 .btn.off{background:#E8E7E3;color:var(--faint)}
 .btn.sm{padding:9px;font-size:13px}
 .btn:focus-visible,a:focus-visible{outline:2px solid var(--ta);outline-offset:2px}
-.chip{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:999px;
+.chip{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;
   background:var(--ta-soft);color:var(--ta);border:1px solid var(--ta-line)}
 .chip.q{background:#EFEFEC;color:var(--mut);border-color:var(--line)}
 .row{display:flex;align-items:center;gap:10px}
@@ -82,7 +82,7 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .dot{width:6px;height:6px;border-radius:50%;background:var(--me);flex:none}
 .dot.ta{background:var(--ta)}
 .fld{border-bottom:1px solid var(--line);padding:12px 0;display:flex;align-items:center}
-.fld .k{font-size:13.5px;color:var(--mut);width:76px;flex:none}
+.fld .k{font-size:14px;color:var(--mut);width:76px;flex:none}
 .fld .v{font-size:14px;color:var(--ink)}
 .fld .v.hint{color:var(--faint)}
 /* ---------- progress ring (the one bold moment) ---------- */
@@ -91,22 +91,22 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .ring>div{width:102px;height:102px;border-radius:50%;background:var(--card);
   display:grid;place-items:center;text-align:center;line-height:1.2}
 .ring .n{font-family:var(--song);font-size:38px;color:var(--ink);font-variant-numeric:tabular-nums;display:block}
-.ring em{font-style:normal;font-size:11.5px;color:var(--mut)}
+.ring em{font-style:normal;font-size:12px;color:var(--mut)}
 .stats{display:flex;text-align:center}
 .stats>div{flex:1}
 .stats .n{font-family:var(--song);font-size:23px;color:var(--ink);font-variant-numeric:tabular-nums;display:block;line-height:1.25}
-.stats .k{font-size:11.5px;color:var(--mut)}
+.stats .k{font-size:12px;color:var(--mut)}
 
 /* ---------- mood + achievements ---------- */
 .mood{display:flex;gap:5px;flex-wrap:wrap}
-.mood b{font-size:11.5px;font-weight:400;padding:4px 9px;border:1px solid var(--line);
+.mood b{font-size:12px;font-weight:400;padding:4px 9px;border:1px solid var(--line);
   border-radius:999px;color:var(--mut);background:var(--card)}
 .mood b.on{border-color:var(--ta);color:var(--ta);background:var(--ta-soft)}
 .bdgs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 8px;text-align:center}
 .bdg i{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;margin:0 auto 6px;
   font-size:18px;font-style:normal;background:var(--ta-soft);color:var(--ta);border:1px solid var(--ta-line)}
-.bdg b{display:block;font-size:11.5px;font-weight:400;color:var(--ink)}
-.bdg em{font-style:normal;font-size:10.5px;color:var(--faint)}
+.bdg b{display:block;font-size:12px;font-weight:400;color:var(--ink)}
+.bdg em{font-style:normal;font-size:11px;color:var(--faint)}
 .bdg.lk i{background:#EFEEEA;color:#C7C4CA;border:1px dashed #D6D3D8}
 .bdg.lk b{color:var(--faint)}
 .bar{height:4px;border-radius:2px;background:#E7E6E2;margin-top:8px;overflow:hidden}
@@ -119,7 +119,7 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .tl-i::before{content:"";position:absolute;left:-18px;top:6px;width:7px;height:7px;
   border-radius:50%;background:var(--me);box-shadow:0 0 0 3px var(--bg)}
 .tl-i.ta::before{background:var(--ta)}
-.tl-d{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;margin-bottom:4px}
+.tl-d{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums;margin-bottom:4px}
 /* ---------- empty state + calendar ---------- */
 .mt{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:0 12px 30px}
@@ -129,7 +129,7 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .mt p{font-size:13px;color:var(--mut);line-height:1.65;max-width:30ch}
 .mt .btn{width:auto;padding:11px 22px;margin-top:18px}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-.cal span{font-size:10.5px;color:var(--faint);padding:3px 0}
+.cal span{font-size:11px;color:var(--faint);padding:3px 0}
 .cal b{font-size:12px;font-weight:400;color:var(--ink);padding:5px 0;border-radius:7px;
   position:relative;font-variant-numeric:tabular-nums}
 .cal b.dim{color:#C4C1C7}
@@ -142,7 +142,7 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
 .lgd span{font-size:11px;color:var(--mut);display:inline-flex;align-items:center;gap:4px}
 .lgd i{width:11px;height:11px;border-radius:3px;display:inline-block}
 .seg{display:flex;gap:6px;margin-top:10px}
-.seg b{flex:1;text-align:center;font-size:12.5px;font-weight:400;padding:8px 0;
+.seg b{flex:1;text-align:center;font-size:13px;font-weight:400;padding:8px 0;
   border:1px solid var(--line);border-radius:var(--r-s);color:var(--mut);background:var(--card)}
 .seg b.on{border-color:var(--ta);color:var(--ta);background:var(--ta-soft)}
 .code{font-family:var(--song);font-size:23px;letter-spacing:.14em;color:var(--ta)}
@@ -206,11 +206,12 @@ figcaption b{display:block;color:var(--sheet-ink);font-size:14px;font-weight:600
         <div><p class="song num" style="font-size:36px;line-height:1">10</p><code>宋体 38 · 进度环内</code></div>
         <div><p style="font-size:19px;font-weight:600">一起早睡三十天</p><code>苹方 Semibold 19</code></div>
         <div><p style="font-size:15px;font-weight:600">今天还没有打卡</p><code>苹方 Semibold 15</code></div>
-        <div><p style="font-size:13.5px">今天两个人都十一点前躺下了，破了纪录。</p><code>苹方 Regular 13.5 / 1.6</code></div>
-        <div><p style="font-size:12.5px;color:var(--mut)">连续 8 天 · 积分 150</p><code>苹方 Regular 12.5</code></div>
-        <div><p style="font-size:11.5px;color:var(--faint)">还差 22 天</p><code>苹方 Regular 11.5 · 徽章副文案</code></div>
+        <div><p style="font-size:14px">今天两个人都十一点前躺下了，破了纪录。</p><code>苹方 Regular 14 / 1.6</code></div>
+        <div><p style="font-size:13px;color:var(--mut)">连续 8 天 · 积分 150</p><code>苹方 Regular 13</code></div>
+        <div><p style="font-size:12px;color:var(--faint)">还差 22 天</p><code>苹方 Regular 12 · 徽章副文案</code></div>
       </div>
       <p class="t-sub" style="margin-top:14px">两款字：界面全用苹方，宋体只留给进度环里的天数、连续天数和纪念日倒计时这类「成绩数字」，一屏最多出现一次。所有数字开 tabular-nums，天数每天变化时不会跳宽。</p>
+      <p class="t-sub" style="margin-top:10px">字号一律取整，不留 .5：前端按 375 设计稿把 px 换算成 rem，实际渲染尺寸跟着视口走，写 .5 也落不到半个像素上，只是让字阶多一档要记的值。所以七档就是 12 / 13 / 14 / 15 / 19 / 23 / 38，遇到 .5 一律往上取。</p>
     </div>
   </div>
 </section>
