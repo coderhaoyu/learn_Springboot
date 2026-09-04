@@ -5,27 +5,27 @@
 :root {
   color-scheme: light;
 
-  /* 品牌色 */
-  --c-primary: #ff6b8a;
-  --c-primary-strong: #f04f72;
-  --c-primary-soft: #ffe9ee;
+  /* 品牌色：用珊瑚橙表达亲密感，深色表面负责压住整体的甜腻感。 */
+  --c-primary: #f2695d;
+  --c-primary-strong: #de514c;
+  --c-primary-soft: #ffe9e2;
 
   /* 文字 */
-  --c-ink: #1f2933;
-  --c-ink-sub: #5b6b7c;
-  --c-ink-weak: #9aa5b1;
+  --c-ink: #2a2732;
+  --c-ink-sub: #746f79;
+  --c-ink-weak: #a39da5;
   --c-ink-invert: #ffffff;
 
   /* 背景与描边 */
-  --c-bg: #fffdf9;
-  --c-bg-deep: #f3ece5;
+  --c-bg: #fbfaf7;
+  --c-bg-deep: #ebe7e0;
   --c-surface: #ffffff;
-  --c-line: #efe4da;
+  --c-line: #e9e3dc;
 
   /* 状态色 */
   --c-danger: #d93a40;
   --c-danger-soft: #fdecec;
-  --c-success: #2f9e68;
+  --c-success: #4f9b78;
 
   /* 间距 */
   --sp-1: 4px;
@@ -53,9 +53,9 @@
   --r-lg: 16px;
 
   /* 阴影 */
-  --sd-sm: 0 2px 8px rgba(31, 41, 51, 0.06);
-  --sd-md: 0 8px 32px rgba(31, 41, 51, 0.1);
-  --sd-primary: 0 8px 20px rgba(240, 79, 114, 0.26);
+  --sd-sm: 0 2px 8px rgba(42, 39, 50, 0.06);
+  --sd-md: 0 8px 32px rgba(42, 39, 50, 0.1);
+  --sd-primary: 0 10px 22px rgba(222, 81, 76, 0.24);
 
   /* 最小可点击尺寸，移动端不要小于这个值 */
   --tap-min: 44px;
