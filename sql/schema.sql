@@ -54,3 +54,20 @@ CREATE TABLE couples
     UNIQUE KEY uk_user_pair (user_a_id, user_b_id),
     KEY idx_user_b_id (user_b_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE couple_invitations
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    inviter_id BIGINT      NOT NULL COMMENT '邀请发起人',
+    code       CHAR(6)     NOT NULL COMMENT '邀请码',
+    expires_at DATETIME    NOT NULL COMMENT '过期时间，签发时间加24小时',
+    status     VARCHAR(20) NOT NULL COMMENT '邀请状态：PENDING/USED',
+    used_at    DATETIME             COMMENT '被使用时间',
+    created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '签发时间',
+    updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+
+    UNIQUE KEY uk_code (code),
+    KEY idx_inviter_id (inviter_id)
+)
