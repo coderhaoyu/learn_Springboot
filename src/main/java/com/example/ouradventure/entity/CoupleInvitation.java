@@ -22,6 +22,17 @@ public class CoupleInvitation {
 
     private LocalDateTime updatedAt;
 
+    public CoupleInvitation() {
+
+    }
+
+    public CoupleInvitation(Long inviterId, String code, LocalDateTime expiresAt, CoupleInvitationStatus status) {
+        this.inviterId = inviterId;
+        this.code = code;
+        this.expiresAt = expiresAt;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
