@@ -1,5 +1,6 @@
 package com.example.ouradventure.common.security;
 
+import com.example.ouradventure.common.exception.ErrorCode;
 import com.example.ouradventure.common.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final String MESSAGE = "未登录或登录已过期";
 
     private final ObjectMapper objectMapper;
 
@@ -38,12 +38,12 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
 
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(ErrorCode.UNAUTHORIZED.getHttpStatus());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         // 必须在 getWriter() 之前设置，否则编码不生效，中文会乱码
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        ApiResponse<Void> body = ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), MESSAGE);
+        ApiResponse<Void> body = ApiResponse.error(ErrorCode.UNAUTHORIZED.getCode(), ErrorCode.UNAUTHORIZED.getMessage());
         objectMapper.writeValue(response.getWriter(), body);
     }
 }
