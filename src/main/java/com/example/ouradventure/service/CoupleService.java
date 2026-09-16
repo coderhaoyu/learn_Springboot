@@ -1,6 +1,7 @@
 package com.example.ouradventure.service;
 
 import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.common.exception.ErrorCode;
 import com.example.ouradventure.entity.CoupleInvitation;
 import com.example.ouradventure.entity.enums.CoupleInvitationStatus;
 import com.example.ouradventure.entity.enums.CoupleStatus;
@@ -34,7 +35,7 @@ public class CoupleService {
         Long activeCoupleId = coupleMapper.findCoupleIdByUserIdAndStatus(userId, CoupleStatus.ACTIVE);
 
         if (activeCoupleId != null) {
-            throw new BusinessException(409, "您已绑定伴侣，不能再发起邀请");
+            throw new BusinessException(ErrorCode.ALREADY_BOUND);
         }
 
         // 不做「先查一次码存不存在再插入」：查和插之间有并发窗口。
@@ -52,7 +53,7 @@ public class CoupleService {
             }
         }
 
-        throw new BusinessException(500, "邀请码生成失败，请重试");
+        throw new BusinessException(ErrorCode.INVITATION_CODE_FAILED);
     }
 
     private String randomCode() {

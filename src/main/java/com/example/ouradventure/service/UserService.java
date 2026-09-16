@@ -1,6 +1,7 @@
 package com.example.ouradventure.service;
 
 import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.common.exception.ErrorCode;
 import com.example.ouradventure.common.response.PageResult;
 import com.example.ouradventure.coverter.UserConverter;
 import com.example.ouradventure.dto.CreateUserRequest;
@@ -46,7 +47,7 @@ public class UserService {
     public UserVo findById(long id) {
         User user = userMapper.findById(id);
         if (user == null) {
-            throw new BusinessException(404, "用户不存在");
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         return UserConverter.toVo(user);
     }
@@ -58,7 +59,7 @@ public class UserService {
 
 //      查重：只有在查出记录 且 查出的记录不是自己 时才拦截
         if (existUserByEmail != null && !Objects.equals(existUserByEmail.getId(), id)) {
-            throw new BusinessException(409, "邮箱已经存在");
+            throw new BusinessException(ErrorCode.EMAIL_ALREADY_USED);
         }
 
         User newUser = new User();

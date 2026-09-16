@@ -1,6 +1,7 @@
 package com.example.ouradventure.service;
 
 import com.example.ouradventure.common.exception.BusinessException;
+import com.example.ouradventure.common.exception.ErrorCode;
 import com.example.ouradventure.common.security.JwtService;
 import com.example.ouradventure.coverter.UserConverter;
 import com.example.ouradventure.dto.LoginRequest;
@@ -35,7 +36,7 @@ public class AuthService {
         User existUser = userMapper.findUserByEmail(registerRequest.getEmail().trim().toLowerCase(Locale.ROOT));
 
         if (existUser != null) {
-            throw new BusinessException(409, "邮箱已被注册");
+            throw new BusinessException(ErrorCode.EMAIL_ALREADY_USED);
         }
 
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
@@ -48,7 +49,7 @@ public class AuthService {
         try {
             userMapper.addUser(user);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException(409, "邮箱已被注册");
+            throw new BusinessException(ErrorCode.EMAIL_ALREADY_USED);
         }
     }
 
@@ -60,11 +61,11 @@ public class AuthService {
 
         User user = userMapper.findAuthUserByEmail(email);
         if (user == null) {
-            throw new BusinessException(401, "邮箱或密码错误");
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BusinessException(401, "邮箱或密码错误");
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
         LoginVo loginVo = new LoginVo();

@@ -12,26 +12,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e) {
-        int code = e.getCode();
-        String message = e.getMessage();
+        ErrorCode errorCode = e.getErrorCode();
+        ApiResponse<Void> response = ApiResponse.error(errorCode.getCode(), errorCode.getMessage());
 
-        ApiResponse<Void> response = ApiResponse.error(code, message);
-
-        return ResponseEntity.status(code).body(response);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
 
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
-        String message = "参数校验失败";
+        String message = ErrorCode.PARAM_INVALID.getMessage();
 
         if (e.getBindingResult().getFieldError() != null) {
             message = e.getBindingResult().getFieldError().getDefaultMessage();
         }
 
-        ApiResponse<Void> response = ApiResponse.error(400, message);
+        ApiResponse<Void> response = ApiResponse.error(ErrorCode.PARAM_INVALID.getCode(), message);
 
-        return ResponseEntity.status(400).body(response);
+        return ResponseEntity.status(ErrorCode.PARAM_INVALID.getHttpStatus()).body(response);
 
 
     }
@@ -40,17 +38,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleConstraintViolationException(ConstraintViolationException e) {
         String message = e.getConstraintViolations().iterator().next().getMessage();
 
-        ApiResponse<Void> response = ApiResponse.error(400, message);
+        ApiResponse<Void> response = ApiResponse.error(ErrorCode.PARAM_INVALID.getCode(), message);
 
-        return  ResponseEntity.status(400).body(response);
+        return  ResponseEntity.status(ErrorCode.PARAM_INVALID.getHttpStatus()).body(response);
 
     }
 
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        ApiResponse<Void> response = ApiResponse.error(500, "系统繁忙，请稍后重试");
+        ApiResponse<Void> response = ApiResponse.error(ErrorCode.SYSTEM_ERROR.getCode(), ErrorCode.SYSTEM_ERROR.getMessage());
 
-        return ResponseEntity.status(500).body(response);
+        return ResponseEntity.status(ErrorCode.SYSTEM_ERROR.getHttpStatus()).body(response);
     }
 }
