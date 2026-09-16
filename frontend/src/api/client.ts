@@ -4,10 +4,8 @@ import type { ApiResponse } from '../types/api';
 import { UNAUTHORIZED_EVENT, clearAuth, readToken } from '../stores/authStorage';
 
 const FALLBACK_MESSAGE = '网络异常，请稍后重试';
-
 export const apiClient = axios.create({
-  // 默认走 vite 代理（见 vite.config.ts），部署时用 VITE_API_BASE_URL 覆盖
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

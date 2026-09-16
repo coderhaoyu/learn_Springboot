@@ -15,9 +15,9 @@ pnpm preview
 
 ## 后端联调
 
-后端默认跑在 `http://localhost:8080`，接口本身没有 `/api` 前缀（例如 `POST /auth/login`）。
+后端默认跑在 `http://localhost:8080`，通过 `server.servlet.context-path=/api` 统一配置了 `/api` 前缀（例如 `POST /api/auth/login`）。
 
-前端统一请求 `/api/**`，由 `vite.config.ts` 里的代理转发并去掉前缀，因此开发阶段不需要后端配置 CORS。
+前端统一请求 `/api/**`，由 `vite.config.ts` 里的代理直接透传到后端，因此开发阶段不需要后端配置 CORS。
 部署到别的域名时用 `VITE_API_BASE_URL` 覆盖请求前缀。
 
 ## H5 适配
@@ -56,6 +56,7 @@ src/
 ## 已完成页面
 
 - 登录（`/login`）：邮箱密码登录、字段校验、错误提示、密码显隐、登录态持久化；
+- 注册（`/register`）：昵称/邮箱/密码注册、字段约束校验、错误拦截、注册后自动登录落地；
 - 登录后落地页（`/`）：展示当前用户并支持退出登录。
 
-注册页面、情侣绑定和挑战相关页面尚未接入。
+情侣绑定和挑战相关页面尚未接入。

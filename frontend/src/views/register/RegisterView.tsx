@@ -1,18 +1,26 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { getApiErrorMessage } from '../../api/client';
 import { useAuthStore } from '../../stores/auth';
-import styles from './LoginView.module.css';
+import styles from './RegisterView.module.css';
 
 type FieldErrors = {
+  nickname?: string;
   email?: string;
   password?: string;
 };
 
-/** 只做基础格式拦截，真正的判定仍以后端返回为准 */
+/** 基础格式校验，与后端校验约束对齐（nickname 2-20, email 邮箱格式, password 6-20） */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const UserIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.controlIcon}>
+    <circle cx="12" cy="8" r="3.2" />
+    <path d="M5.5 20c.7-3.3 2.8-5 6.5-5s5.8 1.7 6.5 5" />
+  </svg>
+);
 
 const MailIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.controlIcon}>
@@ -44,7 +52,7 @@ const EyeIcon = ({ visible }: { visible: boolean }) =>
 
 const CompassIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.logoIcon}>
-    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="8.5" r="8.5" />
     <path d="m14.9 9.1-1.7 4.1-4.1 1.7 1.7-4.1 4.1-1.7Z" />
     <path d="M12 3v1.5M12 19.5V21M3 12h1.5M19.5 12H21" />
   </svg>
@@ -57,17 +65,27 @@ const SparkleIcon = () => (
   </svg>
 );
 
-const validate = (email: string, password: string): FieldErrors => {
+const validate = (nickname: string, email: string, password: string): FieldErrors => {
   const errors: FieldErrors = {};
+  const trimmedNickname = nickname.trim();
+  const trimmedEmail = email.trim();
 
-  if (!email.trim()) {
+  if (!trimmedNickname) {
+    errors.nickname = '请输入昵称';
+  } else if (trimmedNickname.length < 2 || trimmedNickname.length > 20) {
+    errors.nickname = '昵称长度必须在 2 到 20 个字符之间';
+  }
+
+  if (!trimmedEmail) {
     errors.email = '请输入邮箱';
-  } else if (!EMAIL_PATTERN.test(email.trim())) {
+  } else if (!EMAIL_PATTERN.test(trimmedEmail)) {
     errors.email = '邮箱格式不正确';
   }
 
   if (!password) {
     errors.password = '请输入密码';
+  } else if (password.length < 6 || password.length > 20) {
+    errors.password = '密码长度必须在 6 到 20 位之间';
   }
 
   return errors;
@@ -76,11 +94,11 @@ const validate = (email: string, password: string): FieldErrors => {
 const controlClass = (invalid: boolean): string =>
   invalid ? `${styles.control} ${styles.controlInvalid}` : styles.control;
 
-const LoginView = () => {
+const RegisterView = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const signIn = useAuthStore((state) => state.signIn);
+  const signUp = useAuthStore((state) => state.signUp);
 
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -88,14 +106,10 @@ const LoginView = () => {
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // 被路由守卫拦下来时会带上原本要去的地址
-  const redirectTo = (location.state as { from?: string } | null)?.from ?? '/';
-
   const handleChange =
     (field: keyof FieldErrors, setValue: (value: string) => void) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       setValue(event.target.value);
-      // 一开始修改就撤掉上一次的报错，不要一直红着
       setFormError('');
       setFieldErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
     };
@@ -106,20 +120,25 @@ const LoginView = () => {
       return;
     }
 
-    const errors = validate(email, password);
+    const errors = validate(nickname, email, password);
     setFieldErrors(errors);
     setFormError('');
 
-    if (errors.email || errors.password) {
+    if (errors.nickname || errors.email || errors.password) {
       return;
     }
 
     setSubmitting(true);
     try {
-      await signIn({ email: email.trim(), password });
-      navigate(redirectTo, { replace: true });
+      // 注册成功后直接自动调用登录并更新状态，一步进入首页
+      await signUp({
+        nickname: nickname.trim(),
+        email: email.trim(),
+        password,
+      });
+      navigate('/', { replace: true });
     } catch (error) {
-      // 后端已经返回了可直接展示的文案，例如“邮箱或密码错误”
+      // 捕获例如“邮箱已被注册”等后端业务异常或校验错误
       setFormError(getApiErrorMessage(error));
       setSubmitting(false);
     }
@@ -141,13 +160,13 @@ const LoginView = () => {
       </header>
 
       <main className={styles.main}>
-        <p className={styles.overline}>WELCOME BACK</p>
+        <p className={styles.overline}>CREATE ACCOUNT</p>
         <h1 className={styles.title}>
-          继续你们的
+          开启属于你们的
           <br />
-          <span>下一段故事。</span>
+          <span>第一段冒险。</span>
         </h1>
-        <p className={styles.subtitle}>登录后，把那些想一起完成的小事记录下来。</p>
+        <p className={styles.subtitle}>注册账号，把那些想一起完成的小事记录下来。</p>
 
         <div className={styles.promise}>
           <span className={styles.promiseIcon}>
@@ -165,19 +184,56 @@ const LoginView = () => {
             </p>
           ) : null}
 
+          {/* 昵称输入 */}
           <div className={styles.field}>
             <div className={styles.fieldHeader}>
-              <label className={styles.label} htmlFor="login-email">
+              <label className={styles.label} htmlFor="register-nickname">
+                你的昵称
+              </label>
+              <span className={styles.fieldHint}>2-20 个字符</span>
+            </div>
+            <div className={controlClass(Boolean(fieldErrors.nickname))}>
+              <span className={styles.iconWrap} aria-hidden="true">
+                <UserIcon />
+              </span>
+              <input
+                id="register-nickname"
+                className={styles.input}
+                type="text"
+                value={nickname}
+                placeholder="例如：阿星、桃子"
+                autoComplete="nickname"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="next"
+                maxLength={20}
+                aria-invalid={Boolean(fieldErrors.nickname)}
+                aria-describedby={fieldErrors.nickname ? 'register-nickname-error' : undefined}
+                onChange={handleChange('nickname', setNickname)}
+              />
+            </div>
+            {fieldErrors.nickname ? (
+              <p className={styles.fieldError} id="register-nickname-error">
+                {fieldErrors.nickname}
+              </p>
+            ) : null}
+          </div>
+
+          {/* 邮箱输入 */}
+          <div className={styles.field}>
+            <div className={styles.fieldHeader}>
+              <label className={styles.label} htmlFor="register-email">
                 邮箱地址
               </label>
-              <span className={styles.fieldHint}>账号登录</span>
+              <span className={styles.fieldHint}>账号登录凭据</span>
             </div>
             <div className={controlClass(Boolean(fieldErrors.email))}>
               <span className={styles.iconWrap} aria-hidden="true">
                 <MailIcon />
               </span>
               <input
-                id="login-email"
+                id="register-email"
                 className={styles.input}
                 type="email"
                 value={email}
@@ -188,40 +244,44 @@ const LoginView = () => {
                 autoCorrect="off"
                 spellCheck={false}
                 enterKeyHint="next"
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? 'register-email-error' : undefined}
                 onChange={handleChange('email', setEmail)}
               />
             </div>
             {fieldErrors.email ? (
-              <p className={styles.fieldError} id="login-email-error">
+              <p className={styles.fieldError} id="register-email-error">
                 {fieldErrors.email}
               </p>
             ) : null}
           </div>
 
+          {/* 密码输入 */}
           <div className={styles.field}>
             <div className={styles.fieldHeader}>
-              <label className={styles.label} htmlFor="login-password">
-                登录密码
+              <label className={styles.label} htmlFor="register-password">
+                设置密码
               </label>
-              <span className={styles.fieldHint}>保持私密</span>
+              <span className={styles.fieldHint}>6-20 位字符</span>
             </div>
             <div className={controlClass(Boolean(fieldErrors.password))}>
               <span className={styles.iconWrap} aria-hidden="true">
                 <LockIcon />
               </span>
               <input
-                id="login-password"
+                id="register-password"
                 className={styles.input}
                 type={passwordVisible ? 'text' : 'password'}
                 value={password}
-                placeholder="输入你的密码"
-                autoComplete="current-password"
+                placeholder="输入 6-20 位密码"
+                autoComplete="new-password"
                 autoCapitalize="off"
                 autoCorrect="off"
                 spellCheck={false}
-                enterKeyHint="go"
+                enterKeyHint="done"
+                maxLength={20}
                 aria-invalid={Boolean(fieldErrors.password)}
-                aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
+                aria-describedby={fieldErrors.password ? 'register-password-error' : undefined}
                 onChange={handleChange('password', setPassword)}
               />
               <button
@@ -235,7 +295,7 @@ const LoginView = () => {
               </button>
             </div>
             {fieldErrors.password ? (
-              <p className={styles.fieldError} id="login-password-error">
+              <p className={styles.fieldError} id="register-password-error">
                 {fieldErrors.password}
               </p>
             ) : null}
@@ -245,11 +305,11 @@ const LoginView = () => {
             {submitting ? (
               <>
                 <span className={styles.spinner} aria-hidden="true" />
-                登录中…
+                注册中…
               </>
             ) : (
               <>
-                开始冒险
+                创建账号
                 <span className={styles.submitArrow} aria-hidden="true">
                   →
                 </span>
@@ -262,9 +322,9 @@ const LoginView = () => {
       <footer className={styles.footer}>
         <span className={styles.footerRule} />
         <p>
-          还没有账号？
-          <Link to="/register" className={styles.link}>
-            立即注册
+          已有账号？
+          <Link to="/login" className={styles.link}>
+            直接登录
           </Link>
         </p>
         <span className={styles.footerRule} />
@@ -273,4 +333,4 @@ const LoginView = () => {
   );
 };
 
-export default LoginView;
+export default RegisterView;

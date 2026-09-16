@@ -3,6 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import HomeView from '../views/home/HomeView';
 import LoginView from '../views/login/LoginView';
+import RegisterView from '../views/register/RegisterView';
 import { GuestOnly, RequireAuth } from './guards';
 
 export const router = createBrowserRouter([
@@ -23,6 +24,14 @@ export const router = createBrowserRouter([
         element: (
           <GuestOnly>
             <LoginView />
+          </GuestOnly>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <GuestOnly>
+            <RegisterView />
           </GuestOnly>
         ),
       },

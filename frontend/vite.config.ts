@@ -9,11 +9,9 @@ export default defineConfig({
     port: 5173,
     proxy: {
       // 前端统一请求 /api/**，开发环境代理到后端，绕开跨域
-      // 后端接口本身没有 /api 前缀（如 POST /auth/login），所以转发时去掉
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
