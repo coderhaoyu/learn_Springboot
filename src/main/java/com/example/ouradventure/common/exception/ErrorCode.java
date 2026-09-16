@@ -13,6 +13,8 @@ public enum ErrorCode {
 
     PARAM_INVALID(400, 1, "参数校验失败"),
 
+    INVITATION_CODE_INVALID(400,2,"邀请码无效"),
+
     UNAUTHORIZED(401, 1, "未登录或登录已过期"),
 
     LOGIN_FAILED(401, 2, "邮箱或密码错误"),
