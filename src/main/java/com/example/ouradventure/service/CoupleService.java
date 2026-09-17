@@ -10,6 +10,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -41,8 +43,7 @@ public class CoupleService {
         // 不做「先查一次码存不存在再插入」：查和插之间有并发窗口。
         // 直接插，让 uk_code 唯一约束做最终裁判，冲突了就换一个码重试
         for (int attempt = 1; attempt <= MAX_GENERATE_ATTEMPTS; attempt++) {
-            CoupleInvitation invitation = new CoupleInvitation(
-                    userId, randomCode(), LocalDateTime.now().plusHours(CODE_VALID_HOURS), CoupleInvitationStatus.PENDING);
+            CoupleInvitation invitation = new CoupleInvitation(userId, randomCode(), LocalDateTime.now().plusHours(CODE_VALID_HOURS), CoupleInvitationStatus.PENDING);
 
             try {
                 coupleMapper.addInvitation(invitation);
@@ -54,6 +55,51 @@ public class CoupleService {
         }
 
         throw new BusinessException(ErrorCode.INVITATION_CODE_FAILED);
+    }
+
+    public void bindInvitationCode(Long myId, String code) {
+        Long myActiveCoupleId = coupleMapper.findCoupleIdByUserIdAndStatus(myId, CoupleStatus.ACTIVE);
+
+        CoupleInvitation coupleInvitationInfo = coupleMapper.findInvitation(code);
+
+        if (coupleInvitationInfo == null) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID);
+        }
+
+        if (coupleInvitationInfo.getStatus() == CoupleInvitationStatus.USED) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID, "邀请码已被使用");
+        }
+
+        LocalDateTime expireAt = coupleInvitationInfo.getExpiresAt();
+
+        if (expireAt.isBefore(LocalDateTime.now())) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID, "邀请码已失效");
+        }
+
+        if (myActiveCoupleId != null) {
+            throw new BusinessException(ErrorCode.ALREADY_BOUND);
+        }
+
+        Long inviterId = coupleInvitationInfo.getInviterId();
+
+        Long inviterActiveCoupleId = coupleMapper.findCoupleIdByUserIdAndStatus(inviterId, CoupleStatus.ACTIVE);
+
+        if (inviterActiveCoupleId != null) {
+            throw new BusinessException(ErrorCode.ALREADY_BOUND, "邀请人已经绑定了");
+        }
+
+        if (Objects.equals(inviterId, myId)) {
+            throw new BusinessException(ErrorCode.ALREADY_BOUND, "不能绑定自己");
+        }
+
+        Long userAId = Math.min(myId, inviterId);
+
+        Long userBId = Math.max(myId, inviterId);
+
+        coupleMapper.addCouple(userAId, userBId, CoupleStatus.ACTIVE, LocalDateTime.now());
+
+
+
     }
 
     private String randomCode() {

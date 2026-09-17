@@ -5,11 +5,23 @@
         INSERT INTO couple_invitations(inviter_id, code, expires_at, status)
         VALUES (#{inviterId}, #{code}, #{expiresAt}, #{status})
     </insert>
+    <insert id="addCouple">
+        INSERT INTO couples (user_a_id, user_b_id, status, bound_at)
+        VALUES (#{userAId}, #{userBId}, #{status}, #{boundAt})
+    </insert>
+    <update id="updateCoupleStatus">
+        UPDATE couple_invitations SET status = #{status} where code = #{code}
+    </update>
 
     <select id="findCoupleIdByUserIdAndStatus" resultType="java.lang.Long">
         SELECT id
         FROM couples
         WHERE (user_a_id = #{userId} OR user_b_id = #{userId})
           AND status = #{status}
+    </select>
+    <select id="findInvitation" resultType="com.example.ouradventure.entity.CoupleInvitation">
+        SELECT expires_at,status,inviter_id
+        from couple_invitations
+        WHERE code = #{code}
     </select>
 </mapper>

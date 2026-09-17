@@ -1,13 +1,17 @@
 package com.example.ouradventure.controller;
 
 import com.example.ouradventure.common.response.ApiResponse;
+import com.example.ouradventure.dto.BindInvitationRequest;
 import com.example.ouradventure.service.CoupleService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 
+@Validated
 @RestController
 @RequestMapping("/couples")
 public class CoupleController {
@@ -24,6 +28,12 @@ public class CoupleController {
     public ApiResponse<String> createInvitation(@AuthenticationPrincipal Long userId) {
         String code = coupleService.generateInvitationCode(userId);
         return ApiResponse.ok(code);
+    }
+
+    @PostMapping("/bind")
+    public ApiResponse<Void> bindInvitationCode(@AuthenticationPrincipal Long myId, @Valid @RequestBody BindInvitationRequest bindInvitationRequest) {
+        coupleService.bindInvitationCode(myId, bindInvitationRequest.code());
+        return ApiResponse.ok();
     }
 
 }
