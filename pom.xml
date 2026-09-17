@@ -68,6 +68,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- p6spy：JDBC 驱动代理，控制台打印带参数的完整 SQL（仅开发环境使用） -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.9.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
