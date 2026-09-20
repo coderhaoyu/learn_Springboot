@@ -1,7 +1,6 @@
 package com.example.ouradventure.mapper;
 
 import com.example.ouradventure.entity.CoupleInvitation;
-import com.example.ouradventure.entity.enums.CoupleInvitationStatus;
 import com.example.ouradventure.entity.enums.CoupleStatus;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,6 +18,8 @@ public interface CoupleMapper {
 
     CoupleInvitation findInvitation(String code);
 
-    void updateCoupleStatus( @Param("code") String code,  @Param("status") CoupleStatus status);
+    // 返回受影响行数：调用方靠它判断「这个码是不是被我抢到的」。
+    // 返回 void 就只能靠事先查一次状态，而查完到更新之间存在并发窗口
+    int markInvitationUsed(@Param("code") String code, @Param("usedAt") LocalDateTime usedAt);
 
 }

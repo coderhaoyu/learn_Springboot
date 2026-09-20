@@ -8,9 +8,9 @@ import com.example.ouradventure.entity.enums.CoupleStatus;
 import com.example.ouradventure.mapper.CoupleMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -57,49 +57,58 @@ public class CoupleService {
         throw new BusinessException(ErrorCode.INVITATION_CODE_FAILED);
     }
 
+
+    @Transactional
     public void bindInvitationCode(Long myId, String code) {
         Long myActiveCoupleId = coupleMapper.findCoupleIdByUserIdAndStatus(myId, CoupleStatus.ACTIVE);
 
-        CoupleInvitation coupleInvitationInfo = coupleMapper.findInvitation(code);
+        if (myActiveCoupleId != null) {
+            throw new BusinessException(ErrorCode.ALREADY_BOUND, "您已经绑定了伴侣");
+        }
 
-        if (coupleInvitationInfo == null) {
+        CoupleInvitation invitation = coupleMapper.findInvitation(code);
+
+        if (invitation == null) {
             throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID);
         }
 
-        if (coupleInvitationInfo.getStatus() == CoupleInvitationStatus.USED) {
-            throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID, "邀请码已被使用");
-        }
+        Long inviterId = invitation.getInviterId();
 
-        LocalDateTime expireAt = coupleInvitationInfo.getExpiresAt();
-
-        if (expireAt.isBefore(LocalDateTime.now())) {
-            throw new BusinessException(ErrorCode.INVITATION_CODE_INVALID, "邀请码已失效");
-        }
-
-        if (myActiveCoupleId != null) {
-            throw new BusinessException(ErrorCode.ALREADY_BOUND);
-        }
-
-        Long inviterId = coupleInvitationInfo.getInviterId();
-
-        Long inviterActiveCoupleId = coupleMapper.findCoupleIdByUserIdAndStatus(inviterId, CoupleStatus.ACTIVE);
-
-        if (inviterActiveCoupleId != null) {
-            throw new BusinessException(ErrorCode.ALREADY_BOUND, "邀请人已经绑定了");
-        }
-
+        // 放在状态和有效期判断之前：自己用自己的码，不管这个码是什么状态，提示都该是「不能绑自己」。
+        // 放到后面会被「邀请人已经绑定」之类的判断抢先命中，返回一条驴唇不对马嘴的错误
         if (Objects.equals(inviterId, myId)) {
-            throw new BusinessException(ErrorCode.ALREADY_BOUND, "不能绑定自己");
+            throw new BusinessException(ErrorCode.CANNOT_BIND_SELF);
         }
 
+        if (invitation.getStatus() == CoupleInvitationStatus.USED) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_USED);
+        }
+
+        if (invitation.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_EXPIRED);
+        }
+
+        if (coupleMapper.findCoupleIdByUserIdAndStatus(inviterId, CoupleStatus.ACTIVE) != null) {
+            throw new BusinessException(ErrorCode.PARTNER_ALREADY_BOUND);
+        }
+
+        // 以上全是读操作，读到的结论到这一刻就可能过期。
+        // 条件更新把「检查」和「占用」压成一次原子操作：并发时只有一个请求能让 PENDING 变成 USED
+        LocalDateTime now = LocalDateTime.now();
+
+        int rows = coupleMapper.markInvitationUsed(code, now);
+
+        if (rows == 0) {
+            throw new BusinessException(ErrorCode.INVITATION_CODE_USED);
+        }
+
+        // 抢到码之后才写关系。顺序反过来的话，重复提交会先插进一条马上要回滚的关系，
+        // 而且失败原因会变成数据库唯一约束异常（500），而不是「邀请码已被使用」（409）
         Long userAId = Math.min(myId, inviterId);
 
         Long userBId = Math.max(myId, inviterId);
 
-        coupleMapper.addCouple(userAId, userBId, CoupleStatus.ACTIVE, LocalDateTime.now());
-
-
-
+        coupleMapper.addCouple(userAId, userBId, CoupleStatus.ACTIVE, now);
     }
 
     private String randomCode() {

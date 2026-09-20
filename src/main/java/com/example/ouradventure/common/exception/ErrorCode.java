@@ -25,6 +25,16 @@ public enum ErrorCode {
 
     ALREADY_BOUND(409, 2, "您已绑定伴侣，不能再发起邀请"),
 
+    INVITATION_CODE_EXPIRED(409, 3, "邀请码已过期，请让伴侣重新生成"),
+
+    INVITATION_CODE_USED(409, 4, "邀请码已被使用，请让伴侣重新生成"),
+
+    CANNOT_BIND_SELF(409, 5, "不能使用自己生成的邀请码"),
+
+    PARTNER_ALREADY_BOUND(409, 6, "对方已经绑定了伴侣"),
+
+    DATA_CONFLICT(409, 7, "数据冲突，请刷新后重试"),
+
     SYSTEM_ERROR(500, 1, "系统繁忙，请稍后重试"),
 
     INVITATION_CODE_FAILED(500, 2, "邀请码生成失败，请重试");

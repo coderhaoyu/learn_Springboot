@@ -9,8 +9,14 @@
         INSERT INTO couples (user_a_id, user_b_id, status, bound_at)
         VALUES (#{userAId}, #{userBId}, #{status}, #{boundAt})
     </insert>
-    <update id="updateCoupleStatus">
-        UPDATE couple_invitations SET status = #{status} where code = #{code}
+    <!-- 条件更新：只有仍然是 PENDING 的行才会被改成 USED。
+         status = 'PENDING' 是这次抢占的裁判条件，并发时只有一个事务能让它命中 -->
+    <update id="markInvitationUsed">
+        UPDATE couple_invitations
+        SET status  = 'USED',
+            used_at = #{usedAt}
+        WHERE code = #{code}
+          AND status = 'PENDING'
     </update>
 
     <select id="findCoupleIdByUserIdAndStatus" resultType="java.lang.Long">
