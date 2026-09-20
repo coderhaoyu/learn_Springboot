@@ -1,59 +1,66 @@
 CREATE TABLE users
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-    name       VARCHAR(50) NOT NULL COMMENT '姓名',
+    name       VARCHAR(50)  NOT NULL COMMENT '姓名',
     age        INT COMMENT '年龄',
     email      VARCHAR(100) UNIQUE COMMENT '邮箱',
     password   VARCHAR(255) NOT NULL DEFAULT '' COMMENT '密码哈希',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    created_at DATETIME              DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 #测试数据
-INSERT INTO users (name, age, email) VALUES
-('张伟', 25, 'zhangwei@example.com'),
-('王芳', 28, 'wangfang@example.com'),
-('李强', 32, 'liqiang@example.com'),
-('赵敏', 22, 'zhaomin@example.com'),
-('刘洋', 30, 'liuyang@example.com'),
-('陈杰', 27, 'chenjie@example.com'),
-('杨光', 35, 'yangguang@example.com'),
-('黄磊', 40, 'huanglei@example.com'),
-('周涛', 29, 'zhoutao@example.com'),
-('吴艳', 24, 'wuyan@example.com'),
-('徐勇', 33, 'xuyong@example.com'),
-('孙丽', 26, 'sunli@example.com'),
-('朱峰', 31, 'zhufeng@example.com'),
-('马超', 23, 'machao@example.com'),
-('胡斌', 38, 'hubin@example.com'),
-('郭林', 29, 'guolin@example.com'),
-('何静', 21, 'hejing@example.com'),
-('高翔', 34, 'gaoxiang@example.com'),
-('罗浩', 26, 'luohao@example.com'),
-('郑洁', 28, 'zhengjie@example.com'),
-('梁栋', 36, 'liangdong@example.com'),
-('谢宇', 25, 'xieyu@example.com'),
-('宋涛', 30, 'songtao@example.com'),
-('唐甜', 22, 'tangtian@example.com'),
-('许杰', 27, 'xujie@example.com'),
-('邓军', 45, 'dengjun@example.com'),
-('冯伟', 31, 'fengwei@example.com'),
-('韩梅', 24, 'hanmei@example.com'),
-('曹磊', 33, 'caolei@example.com'),
-('曾敏', 29, 'zengmin@example.com');
+INSERT INTO users (name, age, email)
+VALUES ('张伟', 25, 'zhangwei@example.com'),
+       ('王芳', 28, 'wangfang@example.com'),
+       ('李强', 32, 'liqiang@example.com'),
+       ('赵敏', 22, 'zhaomin@example.com'),
+       ('刘洋', 30, 'liuyang@example.com'),
+       ('陈杰', 27, 'chenjie@example.com'),
+       ('杨光', 35, 'yangguang@example.com'),
+       ('黄磊', 40, 'huanglei@example.com'),
+       ('周涛', 29, 'zhoutao@example.com'),
+       ('吴艳', 24, 'wuyan@example.com'),
+       ('徐勇', 33, 'xuyong@example.com'),
+       ('孙丽', 26, 'sunli@example.com'),
+       ('朱峰', 31, 'zhufeng@example.com'),
+       ('马超', 23, 'machao@example.com'),
+       ('胡斌', 38, 'hubin@example.com'),
+       ('郭林', 29, 'guolin@example.com'),
+       ('何静', 21, 'hejing@example.com'),
+       ('高翔', 34, 'gaoxiang@example.com'),
+       ('罗浩', 26, 'luohao@example.com'),
+       ('郑洁', 28, 'zhengjie@example.com'),
+       ('梁栋', 36, 'liangdong@example.com'),
+       ('谢宇', 25, 'xieyu@example.com'),
+       ('宋涛', 30, 'songtao@example.com'),
+       ('唐甜', 22, 'tangtian@example.com'),
+       ('许杰', 27, 'xujie@example.com'),
+       ('邓军', 45, 'dengjun@example.com'),
+       ('冯伟', 31, 'fengwei@example.com'),
+       ('韩梅', 24, 'hanmei@example.com'),
+       ('曹磊', 33, 'caolei@example.com'),
+       ('曾敏', 29, 'zengmin@example.com');
 
-CREATE TABLE couples
+CREATE TABLE `couples`
 (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-    user_a_id  BIGINT      NOT NULL COMMENT '关系一方，存id较小的一方',
-    user_b_id  BIGINT      NOT NULL COMMENT '关系另一方，存id较大的一方',
-    status     VARCHAR(20) NOT NULL COMMENT '关系状态 ACTIVE/ENDED',
-    bound_at   DATETIME    NOT NULL COMMENT '绑定时间',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    UNIQUE KEY uk_user_pair (user_a_id, user_b_id),
-    KEY idx_user_b_id (user_b_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `id`          bigint                                 NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `user_a_id`   bigint                                 NOT NULL COMMENT '关系一方，存id较小的一方',
+    `user_b_id`   bigint                                 NOT NULL COMMENT '关系另一方，存id较大的一方',
+    `status`      varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关系状态 ACTIVE/ENDED',
+    `bound_at`    datetime                               NOT NULL COMMENT '绑定时间',
+    `created_at`  datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`  datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `active_flag` tinyint GENERATED ALWAYS AS (if((`status` = _utf8mb4'ACTIVE'), 1, NULL)) STORED COMMENT '仅 ACTIVE 行取值 1，用于唯一约束',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_user_pair_active` (`user_a_id`, `user_b_id`, `active_flag`) USING BTREE,
+    KEY `idx_user_b_id` (`user_b_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 9
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE couple_invitations
@@ -63,7 +70,7 @@ CREATE TABLE couple_invitations
     code       CHAR(6)     NOT NULL COMMENT '邀请码',
     expires_at DATETIME    NOT NULL COMMENT '过期时间，签发时间加24小时',
     status     VARCHAR(20) NOT NULL COMMENT '邀请状态：PENDING/USED',
-    used_at    DATETIME             COMMENT '被使用时间',
+    used_at    DATETIME COMMENT '被使用时间',
     created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '签发时间',
     updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
