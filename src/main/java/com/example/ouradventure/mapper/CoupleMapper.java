@@ -1,5 +1,6 @@
 package com.example.ouradventure.mapper;
 
+import com.example.ouradventure.entity.Couple;
 import com.example.ouradventure.entity.CoupleInvitation;
 import com.example.ouradventure.entity.enums.CoupleStatus;
 import org.apache.ibatis.annotations.Param;
@@ -13,6 +14,9 @@ public interface CoupleMapper {
 
     // 调用方只关心「有没有」，所以返回关系 id；返回 Couple 会让 status 等字段是隐性的 null
     Long findCoupleIdByUserIdAndStatus(@Param("userId") Long userId, @Param("status") CoupleStatus status);
+
+    // 查询伴侣需要知道「另一方是谁」，所以这里必须取回两个 id
+    Couple findActiveCoupleByUserId(@Param("userId") Long userId);
 
     void addCouple(@Param("userAId") Long userAId, @Param("userBId") Long userBId, @Param("status") CoupleStatus status, @Param("boundAt") LocalDateTime boundAt);
 

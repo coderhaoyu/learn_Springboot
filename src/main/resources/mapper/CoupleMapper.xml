@@ -30,4 +30,10 @@
         from couple_invitations
         WHERE code = #{code}
     </select>
+    <select id="findActiveCoupleByUserId" resultType="com.example.ouradventure.entity.Couple">
+        SELECT id, user_a_id, user_b_id, status, bound_at
+        FROM couples
+        WHERE (user_a_id = #{userId} OR user_b_id = #{userId})
+          AND status = 'ACTIVE'
+    </select>
 </mapper>

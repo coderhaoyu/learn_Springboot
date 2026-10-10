@@ -3,6 +3,7 @@ package com.example.ouradventure.controller;
 import com.example.ouradventure.common.response.ApiResponse;
 import com.example.ouradventure.dto.BindInvitationRequest;
 import com.example.ouradventure.service.CoupleService;
+import com.example.ouradventure.vo.CoupleVo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +35,12 @@ public class CoupleController {
     public ApiResponse<Void> bindInvitationCode(@AuthenticationPrincipal Long myId, @Valid @RequestBody BindInvitationRequest bindInvitationRequest) {
         coupleService.bindInvitationCode(myId, bindInvitationRequest.code());
         return ApiResponse.ok();
+    }
+
+    // 未绑定时返回 200 + data 为 null：没绑定是查询的正常结果，不是错误
+    @GetMapping("/me")
+    public ApiResponse<CoupleVo> getMyCouple(@AuthenticationPrincipal Long userId) {
+        return ApiResponse.ok(coupleService.getMyCouple(userId));
     }
 
 }

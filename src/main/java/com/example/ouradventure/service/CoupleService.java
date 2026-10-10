@@ -2,10 +2,16 @@ package com.example.ouradventure.service;
 
 import com.example.ouradventure.common.exception.BusinessException;
 import com.example.ouradventure.common.exception.ErrorCode;
+import com.example.ouradventure.coverter.CoupleConverter;
+import com.example.ouradventure.coverter.UserConverter;
+import com.example.ouradventure.entity.Couple;
 import com.example.ouradventure.entity.CoupleInvitation;
 import com.example.ouradventure.entity.enums.CoupleInvitationStatus;
 import com.example.ouradventure.entity.enums.CoupleStatus;
 import com.example.ouradventure.mapper.CoupleMapper;
+import com.example.ouradventure.mapper.UserMapper;
+import com.example.ouradventure.vo.CoupleVo;
+import com.example.ouradventure.vo.UserVo;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +35,11 @@ public class CoupleService {
 
     private final CoupleMapper coupleMapper;
 
-    public CoupleService(CoupleMapper coupleMapper) {
+    private final UserMapper userMapper;
+
+    public CoupleService(CoupleMapper coupleMapper, UserMapper userMapper) {
         this.coupleMapper = coupleMapper;
+        this.userMapper = userMapper;
     }
 
     public String generateInvitationCode(Long userId) {
@@ -109,6 +118,23 @@ public class CoupleService {
         Long userBId = Math.max(myId, inviterId);
 
         coupleMapper.addCouple(userAId, userBId, CoupleStatus.ACTIVE, now);
+    }
+
+    public CoupleVo getMyCouple(Long userId) {
+        Couple couple = coupleMapper.findActiveCoupleByUserId(userId);
+
+        if (couple == null) {
+            return null;
+        }
+
+        // 关系表按 id 大小存两方，所以「另一方」取决于当前用户在 a 还是 b
+        Long partnerId = Objects.equals(couple.getUserAId(), userId)
+                ? couple.getUserBId()
+                : couple.getUserAId();
+
+        UserVo partner = UserConverter.toVo(userMapper.findById(partnerId));
+
+        return CoupleConverter.toVo(couple, partner);
     }
 
     private String randomCode() {
